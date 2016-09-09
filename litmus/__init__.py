@@ -21,4 +21,4 @@ _duts_ = os.path.join(_confdir_, 'topology')
 _projects_ = os.path.join(_confdir_, 'projects')
 _tmpdir_ = '/tmp'
 _path_for_locks_ = '/var/lock/litmus/'
-_dev_types_ = ('u3', 'xu3', 'empty')
+_dev_types_ = ('u3', 'xu3', 'mock', 'empty')

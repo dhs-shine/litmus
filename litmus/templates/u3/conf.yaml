@@ -1,5 +1,5 @@
 binary_urls:
     - http://download.tizen.org/snapshots/tizen/tv/latest/images/arm-wayland/tv-wayland-armv7l-odroidu3/
     - http://download.tizen.org/snapshots/tizen/tv/latest/images/arm-wayland/tv-boot-armv7l-odroidu3/
-username   : <username>
-password   : <password>
+username: <username>
+password: <password>
