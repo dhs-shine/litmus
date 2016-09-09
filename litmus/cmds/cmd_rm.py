@@ -16,20 +16,19 @@
 import shutil
 import logging
 from configparser import RawConfigParser
-from litmus import _projects_
 
 
 def main(args):
     """docstring for main"""
     configparser = RawConfigParser()
-    configparser.read(_projects_)
+    configparser.read(args.projects)
 
     if args.project in configparser.sections():
         path = configparser.get(args.project, 'path')
         shutil.rmtree(path)
 
         configparser.remove_section(args.project)
-        with open(_projects_, 'w') as f:
+        with open(args.projects, 'w') as f:
             configparser.write(f)
         logging.debug('Project {0} is removed'.format(args.project))
     else:

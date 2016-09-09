@@ -15,7 +15,6 @@
 
 import os
 import logging
-from litmus import _duts_
 
 
 def load_device_list(topology):
@@ -27,4 +26,4 @@ def load_device_list(topology):
 def main(args):
     """docstring for main"""
     logging.debug('=====list of all devices in topology=====\n')
-    load_device_list(_duts_)
+    load_device_list(args.topology)

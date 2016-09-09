@@ -18,4 +18,4 @@ from litmus.helper.gt import main as gt_main
 
 def main(args):
     """docstring for main"""
-    gt_main()
+    gt_main(topology=args.topology)

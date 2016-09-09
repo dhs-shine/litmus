@@ -14,14 +14,13 @@
 # limitations under the License.
 
 import os
-from litmus import _projects_
 from litmus.cmds import load_project_list
 from litmus.core.util import call
 
 
 def main(args):
     """docstring for main"""
-    prj_list = load_project_list()
+    prj_list = load_project_list(args.projects)
 
     project = next((prj for prj in prj_list
                     if prj['name'] == args.project),
@@ -60,7 +59,7 @@ def main(args):
 
     call(['chmod', '-R', '775', prj_path])
 
-    with open(_projects_, 'a') as f:
+    with open(args.projects, 'a') as f:
         f.write('[{0}]\n'.format(args.project))
         f.write('path={0}\n'.format(os.path.abspath(prj_path)))
         f.write('description={0}\n\n'.format(prj_description))

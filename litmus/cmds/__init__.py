@@ -14,13 +14,12 @@
 # limitations under the License.
 
 from configparser import RawConfigParser
-from litmus import _projects_
 
 
-def load_project_list():
+def load_project_list(projects):
     """docstring for load_project_list"""
     configparser = RawConfigParser()
-    configparser.read(_projects_)
+    configparser.read(projects)
 
     project_list = []
     for section in configparser.sections():

@@ -63,7 +63,12 @@ Lightweight test manager for tizen automated testing
         self.kwargs = kwargs
         logging.debug(self._comment)
 
-        self._load_configs(_duts_)
+        if 'topology' in self.kwargs and self.kwargs['topology']:
+            tp = self.kwargs['topology']
+        else:
+            tp = _duts_
+        self._load_configs(tp)
+
         if 'project_name' in self.kwargs:
             self._project_name = self.kwargs['project_name']
         if 'project_path' in self.kwargs:

@@ -50,6 +50,8 @@ class generate_topology_sdb_device(object):
         super(generate_topology_sdb_device, self).__init__()
         if 'append' in kwargs and kwargs['append']:
             self.open_mode = 'a+'
+        if 'topology' in kwargs and kwargs['topology']:
+            self.topology_path = kwargs['topology']
 
     def init_smartpowers(self):
         """docstring for init_smartpowers"""
@@ -309,12 +311,12 @@ class generate_topology_sdb_device(object):
         self.close_uarts()
 
 
-def main():
+def main(topology):
     """docstring for main"""
     try:
 
         logging.debug('# phase 1 : detect all devices which use sdb')
-        phase_sdb = generate_topology_sdb_device()
+        phase_sdb = generate_topology_sdb_device(topology=topology)
         phase_sdb.run()
 
     except KeyboardInterrupt:

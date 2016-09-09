@@ -19,7 +19,7 @@ from litmus.cmds import load_project_list
 
 def main(args):
     """docstring for main"""
-    prj_list = load_project_list()
+    prj_list = load_project_list(args.projects)
     logging.debug('=====list of all litmus projects=====')
     for loop in prj_list:
         logging.debug('{0:10s} ({1} : {2})'.format(loop['name'],
