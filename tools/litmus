@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+# Copyright 2015-2016 Samsung Electronics Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import os
+import sys
+import signal
+import shutil
+import functools
+import logging
+import traceback
+from argparse import ArgumentParser, RawTextHelpFormatter
+from litmus import __version__, _path_for_locks_
+from litmus.core.util import init_logger
+
+
+def sigterm_handler(signal, frame):
+    """docstring for sigterm_handler"""
+    raise Exception('SIGTERM')
+    sys.exit(1)
+
+
+def subparser(func):
+    """docstring for subparser"""
+    @functools.wraps(func)
+    def wrapper(parser):
+        """docstring for wrapper"""
+        splitted = func.__doc__.split('\n')
+        name = func.__name__.split('_')[0]
+        subparser = parser.add_parser(name, help=splitted[0],
+                                      description='\n'.join(splitted[1:]),
+                                      formatter_class=RawTextHelpFormatter)
+        subparser.set_defaults(module='cmd_{0}'.format(name))
+        return func(subparser)
+    return wrapper
+
+
+@subparser
+def adhoc_parser(parser):
+    """run a adhoc script
+    Examples:
+       $ litmus adhoc <project_path>
+    """
+    parser.add_argument('project_path', type=str, help='project path')
+    parser.add_argument('-p', '--param', type=str, nargs='*',
+                        help='parameters for project')
+    parser.add_argument('-d', '--workingdir', type=str,
+                        help='working directory')
+    return parser
+
+
+@subparser
+def mk_parser(parser):
+    """make a new litmus project
+    Examples:
+       $ litmus mk <project_name>
+    """
+    parser.add_argument('project', type=str, help='project name')
+    parser.add_argument('-t', '--type', type=str, help='dut type')
+    parser.add_argument('-d', '--description', type=str, help='description')
+    return parser
+
+
+@subparser
+def rm_parser(parser):
+    """remove a litmus project
+    Examples:
+       $ litmus rm <project_name>
+    """
+    parser.add_argument('project', type=str, help='project name')
+    return parser
+
+
+@subparser
+def run_parser(parser):
+    """run a litmus project
+    Examples:
+       $ litmus run <project_name>
+    """
+    parser.add_argument('project', type=str, help='project name')
+    parser.add_argument('-p', '--param', type=str, nargs='*',
+                        help='parameters for project')
+    parser.add_argument('-d', '--workingdir', type=str,
+                        help='working directory')
+    return parser
+
+
+@subparser
+def ls_parser(parser):
+    """list all litmus projects
+    Examples:
+       $ litmus ls
+    """
+    return parser
+
+
+@subparser
+def dev_parser(parser):
+    """list all devices from topology configuration
+    Examples:
+       $ litmus dev
+    """
+    return parser
+
+
+@subparser
+def gt_parser(parser):
+    """generate a topology configuration
+    Examples:
+       $ litmus gt
+    """
+    return parser
+
+
+@subparser
+def cp_parser(parser):
+    """copy a litmus project
+    Examples:
+       $ litmus cp <origin project name> <new project name>
+    """
+    parser.add_argument('orig', type=str, help='origin project name')
+    parser.add_argument('new', type=str, help='new project name')
+    parser.add_argument('-d', '--description', type=str, help='description')
+    return parser
+
+
+@subparser
+def imp_parser(parser):
+    """import a litmus project
+    Examples:
+       $ litmus imp <project name>
+    """
+    parser.add_argument('project', type=str, help='project name')
+    parser.add_argument('-d', '--description', type=str, help='description')
+    parser.add_argument('-p', '--path', type=str, help='path')
+    return parser
+
+
+def init_lockdir():
+    """docstring for init_lockdir"""
+    if not os.path.exists(_path_for_locks_):
+        os.mkdir(_path_for_locks_)
+    try:
+        shutil.chown(_path_for_locks_, group='litmus')
+        os.chmod(_path_for_locks_, 0o775)
+    except PermissionError:
+        pass
+
+
+def main(argv=None):
+    """docstring for main"""
+    description = 'litmus : lightweight test manager'
+    parser = ArgumentParser(description=description)
+
+    parser.add_argument('-V', '--version',
+                        action='version',
+                        version='%(prog)s ' + __version__)
+
+    parser.format_usage = parser.format_help
+    subparsers = parser.add_subparsers(title='subcommands', dest='subcommands')
+    subparsers.required = True
+
+    for name, obj in sorted(globals().items()):
+        if name.endswith('_parser') and callable(obj):
+            obj(subparsers)
+
+    args = parser.parse_args(argv[1:])
+    module = __import__('litmus.cmds.{0}'.format(args.module),
+                        fromlist=[args.module])
+    return module.main(args)
+
+
+if __name__ == '__main__':
+    try:
+        init_logger()
+        init_lockdir()
+        signal.signal(signal.SIGTERM, sigterm_handler)
+        sys.exit(main(sys.argv))
+    except KeyboardInterrupt:
+        raise Exception('KeyboardInterrupt')
+    except Exception:
+        logging.debug(traceback.format_exc())
+        sys.exit(1)

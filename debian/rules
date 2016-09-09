@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+	make clean
+
+# Commands not to run.
+override_dh_strip override_dh_makeshlibs override_dh_shlibdeps override_dh_auto_test:

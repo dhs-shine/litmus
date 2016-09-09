@@ -1,0 +1,27 @@
+Source: litmus
+Section: devel
+Priority: optional
+Maintainer: Donghoon Shin <dhs.shin@samsung.com>
+Build-Depends: debhelper (>= 8.0.0), python3 (>= 3.3), python3-setuptools (>= 3.3)
+Standards-Version: 3.9.4
+Homepage: http://www.tizen.org
+X-Python-Version: >= 3.3
+
+Package: litmus
+Architecture: any
+Depends: ${python3:Depends}, ${misc:Depends},
+ python3 (>= 3.3),
+ python3-serial (>= 2.6),
+ python3-yaml (>= 3.10),
+ python3-requests (>= 2.2.1),
+ python3-bs4 (>= 4.2.1),
+ python3-fasteners (>= 0.12),
+ git (>= 1.9),
+ lthor (>= 2.0),
+ sdb (>= 2.2.4),
+ clewarecontrol (>= 4.1),
+ smartpower (>= 0.1),
+ heimdall-flash (>= 1.4.1-2),
+Description: Lightweight test manager for tizen automated testing
+ Litmus is a tool for managing test projects and supporting APIs for automated testing.
+ Supported API : turn on / off device, Run commands / push and pull files over sdb

@@ -1,0 +1,26 @@
+======================
+ litmus Release Notes
+======================
+
+Version 0.1.0	09 Jun 2016
+---------------------------
+- Initial Version
+
+Version 0.1.1   27 Jun 2016
+---------------------------
+- Add ttyS0 in uarts list
+- Release global lock at exception of device.on() function
+- Turn off device if keyboard interrupt is raised while flashing or turning on device
+- Add timeout for all call/check_output to avoid hang issue
+
+Version 0.2.0    9 Sep 2016
+---------------------------
+- Remove acmlock routine to improve test performance
+- Support flash function for mock device type
+- Update test helper functions
+
+Version 0.2.1    9 Sep 2016
+---------------------------
+- Update import command to use shell-like path expansions
+- Update mock device type to avoid sdb error
+- Update default templates for u3 and xu3
