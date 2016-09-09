@@ -17,12 +17,11 @@ import os
 import logging
 from litmus.core.util import copy, call
 from litmus.cmds import load_project_list
-from litmus import _projects_
 
 
 def main(args):
     """docstring for main"""
-    prj_list = load_project_list()
+    prj_list = load_project_list(args.projects)
 
     orig = next((prj for prj in prj_list if prj['name'] == args.orig),
                 None)
@@ -43,10 +42,9 @@ def main(args):
             description = args.description
         os.mkdir(path)
         copy(orig['path'], path)
-        call(['chgrp', '-R', 'litmus', path])
         call(['chmod', '-R', '775', path])
 
-        with open(_projects_, 'a') as f:
+        with open(args.projects, 'a') as f:
             f.write('[{0}]\n'.format(args.new))
             f.write('path={0}\n'.format(path))
             f.write('description={0}\n\n'.format(description))

@@ -19,7 +19,7 @@ from litmus.cmds import load_project_list
 
 def main(args):
     """docstring for main"""
-    prj_list = load_project_list()
+    prj_list = load_project_list(args.projects)
     project = next((prj for prj in prj_list if prj['name'] == args.project),
                    None)
     if not project:
@@ -30,4 +30,5 @@ def main(args):
     userscript.main(project_name=args.project,
                     project_path=project['path'],
                     param=args.param,
-                    workingdir=args.workingdir)
+                    workingdir=args.workingdir,
+                    topology=args.topology)

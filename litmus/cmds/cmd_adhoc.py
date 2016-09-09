@@ -23,7 +23,6 @@ def main(args):
     project_path = os.path.abspath(args.project_path)
     sys.path.append(project_path)
 
-    call(['chgrp', '-R', 'litmus', project_path])
     call(['chmod', '-R', '775', project_path])
 
     import userscript

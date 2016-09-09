@@ -16,7 +16,6 @@
 import os
 import time
 import serial
-import shutil
 import logging
 import fasteners
 from threading import Thread, Lock
@@ -529,10 +528,10 @@ class device(object):
         self._global_ilock.acquire()
         # set gid of ilock file
         try:
-            shutil.chown(self._global_ilock.path, group='litmus')
             os.chmod(self._global_ilock.path, 0o664)
         except PermissionError:
-            pass
+            logging.debug('Can\'t change lock file permission')
+
         if self._global_tlock.locked() and self._global_ilock.acquired:
             logging.debug('global lock acquired for {}'
                           .format(self.get_id()))
