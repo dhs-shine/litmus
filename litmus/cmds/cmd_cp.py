@@ -43,7 +43,6 @@ def main(args):
             description = args.description
         os.mkdir(path)
         copy(orig['path'], path)
-        call(['chgrp', '-R', 'litmus', path])
         call(['chmod', '-R', '775', path])
 
         with open(_projects_, 'a') as f:

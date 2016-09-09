@@ -16,12 +16,11 @@
 import os
 import sys
 import signal
-import shutil
 import functools
 import logging
 import traceback
 from argparse import ArgumentParser, RawTextHelpFormatter
-from litmus import __version__, _path_for_locks_
+from litmus import __version__, _path_for_locks_, _duts_, _projects_, _confdir_
 from litmus.core.util import init_logger
 
 
@@ -151,11 +150,34 @@ def init_lockdir():
     """docstring for init_lockdir"""
     if not os.path.exists(_path_for_locks_):
         os.mkdir(_path_for_locks_)
-    try:
-        shutil.chown(_path_for_locks_, group='litmus')
-        os.chmod(_path_for_locks_, 0o775)
-    except PermissionError:
-        pass
+        try:
+            os.chmod(_path_for_locks_, 0o775)
+        except PermissionError:
+            logging.debug('Can\'t change lock directory permission')
+
+
+def init_confdir():
+    """docstring for init_confdir"""
+    if not os.path.exists(_confdir_):
+        os.mkdir(_confdir_)
+        try:
+            os.chmod(_confdir_, 0o775)
+        except PermissionError:
+            logging.debug('Can\'t change config directory permission')
+
+    if not os.path.exists(_duts_):
+        open(_duts_, 'a').close()
+        try:
+            os.chmod(_duts_, 0o664)
+        except PermissionError:
+            logging.debug('Can\'t change topology file permission')
+
+    if not os.path.exists(_projects_):
+        open(_projects_, 'a').close()
+        try:
+            os.chmod(_duts_, 0o664)
+        except PermissionError:
+            logging.debug('Can\'t change projects file permission')
 
 
 def main(argv=None):
@@ -185,6 +207,7 @@ if __name__ == '__main__':
     try:
         init_logger()
         init_lockdir()
+        init_confdir()
         signal.signal(signal.SIGTERM, sigterm_handler)
         sys.exit(main(sys.argv))
     except KeyboardInterrupt:

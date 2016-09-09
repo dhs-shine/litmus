@@ -51,7 +51,6 @@ def main(args):
         src = os.path.join(os.path.join(litmus.__path__[0], 'templates'),
                            dev_type)
         copy(src, path)
-        call(['chgrp', '-R', 'litmus', path])
         call(['chmod', '-R', '775', path])
 
         with open(_projects_, 'a') as f:

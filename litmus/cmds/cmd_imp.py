@@ -58,7 +58,6 @@ def main(args):
         raise Exception('There\'s no litmus project scripts at {0}'
                         .format(prj_path))
 
-    call(['chgrp', '-R', 'litmus', prj_path])
     call(['chmod', '-R', '775', prj_path])
 
     with open(_projects_, 'a') as f:

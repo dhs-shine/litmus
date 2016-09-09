@@ -18,7 +18,6 @@ import os
 from setuptools import setup, find_packages
 
 PROJECT_NAME = 'litmus'
-ETC_PATH = os.path.join('/etc', PROJECT_NAME)
 
 version = re.search("__version__.*'(.+)'",
                     open(os.path.join(PROJECT_NAME, '__init__.py'))
@@ -33,7 +32,6 @@ setup(name=PROJECT_NAME,
       url="http://www.tizen.org",
       package_dir={PROJECT_NAME: 'litmus'},
       packages=find_packages(exclude=['litmus.templates']),
-      data_files=[(ETC_PATH, ['tools/projects', 'tools/topology'])],
       include_package_data=True,
       license="Apache",
       platforms='any',

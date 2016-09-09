@@ -108,10 +108,9 @@ Lightweight test manager for tizen automated testing
                         gotten_tlock = dev['tlock'].acquire(blocking=False)
                         gotten_ilock = dev['ilock'].acquire(blocking=False)
                         try:
-                            shutil.chown(dev['ilock'].path, group='litmus')
                             os.chmod(dev['ilock'].path, 0o664)
                         except PermissionError:
-                            logging.debug('Can\'t change owner and permission')
+                            logging.debug('Can\'t change lock file permission')
 
                         # if acquire tlock and ilock, assign a device.
                         if gotten_tlock and gotten_ilock:
