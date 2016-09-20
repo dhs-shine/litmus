@@ -1,3 +1,10 @@
+litmus (0.3.0-1) unstable; urgency=low
+
+  * Update projects/topology file location
+  * Add projects/topology param at command prompt
+
+ -- Donghoon Shin <dhs.shin@samsung.com>  Mon, 19 Sep 2016 12:39:00 +0900
+
 litmus (0.2.1-1) unstable; urgency=low
 
   * Update import command to use shell-like path expansions

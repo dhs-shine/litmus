@@ -3,11 +3,19 @@ Litmus is an automated testing tool for tizen arm devices.
 Buliding & installing
 ---------------------
 
+1. Change directory name with version postfix and create an orig.tar.gz
+
+   $ mv litmus litmus-0.3.0
+   $ tar cvfz litmus-0.3.0.orig.tar.gz litmus-0.3.0
+
 1. Build a deb package with debuild
+
+   $ cd litmus-0.3.0
+   $ debuild
 
 2. Install the deb package using dpkg
 
-   $ sudo dpkg -i litmus_0.2.1-1_amd64.deb
+   $ sudo dpkg -i litmus_0.3.0-1_amd64.deb
 
 
 Getting started

@@ -24,3 +24,8 @@ Version 0.2.1    9 Sep 2016
 - Update import command to use shell-like path expansions
 - Update mock device type to avoid sdb error
 - Update default templates for u3 and xu3
+
+Version 0.3.0   19 Sep 2016
+---------------------------
+- Update projects/topology file location
+- Add projects/topology param at command prompt
