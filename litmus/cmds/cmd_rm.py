@@ -24,8 +24,17 @@ def main(args):
     configparser.read(args.projects)
 
     if args.project in configparser.sections():
+
+        yn = input('Do you really want to remove {0}? (y/N) '
+                   .format(args.project))
+        if not yn or yn.capitalize().startswith('N'):
+            return
+
         path = configparser.get(args.project, 'path')
-        shutil.rmtree(path)
+        try:
+            shutil.rmtree(path)
+        except FileNotFoundError:
+            logging.debug('{0} does not exists'.format(path))
 
         configparser.remove_section(args.project)
         with open(args.projects, 'w') as f:
