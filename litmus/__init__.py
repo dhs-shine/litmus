@@ -14,7 +14,7 @@
 # limitations under the License.
 import os
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 _homedir_ = os.path.expanduser('~')
 _confdir_ = os.path.join(_homedir_, '.litmus')
 _duts_ = os.path.join(_confdir_, 'topology')

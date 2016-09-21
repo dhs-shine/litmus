@@ -1,3 +1,9 @@
+litmus (0.3.1-1) unstable; urgency=low
+
+  * Update cmd_rm handler
+
+ -- Donghoon Shin <dhs.shin@samsung.com>  Thu, 22 Sep 2016 07:42:00 +0900
+
 litmus (0.3.0-1) unstable; urgency=low
 
   * Update projects/topology file location

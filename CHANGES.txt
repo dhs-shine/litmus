@@ -31,3 +31,7 @@ Version 0.3.0   21 Sep 2016
 - Add projects/topology param at command prompt
 - Support multiple mock devices in topology
 - Add global lock for mock device type
+
+Version 0.3.1   22 Sep 2016
+---------------------------
+- Update cmd_rm handler
