@@ -30,8 +30,11 @@ class devicemock(device):
     def __init__(self, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
-        self._name = kwargs['deviceid']
-        self._id = self._find_device_id()
+        self._name = kwargs['devicename']
+        if 'serialno' in kwargs:
+            self._id = kwargs['serialno']
+        else:
+            self._id = self._find_device_id()
 
         # init a cutter instance.
         self._manager = kwargs['manager']
@@ -42,7 +45,7 @@ class devicemock(device):
 
     def _find_device_id(self):
         """docstring for _find_device_id"""
-        self.refresh_sdb_server()
+        self.start_sdb_server()
         outs = check_output(['sdb', 'devices'], timeout=10)
         pattern = '.*List of devices attached \n([a-zA-Z0-9]*).*device.*'
         found = find_pattern(pattern, outs, groupindex=1)
@@ -72,12 +75,12 @@ class devicemock(device):
         """
         logging.debug('turn on device {}'.format(self.get_name()))
 
-        self.refresh_sdb_server()
+        self.start_sdb_server()
         if self._find_device_id() == self.get_id():
             self._sdb_root_on()
-            self.run_cmd('reboot -f')
+            self.run_cmd('reboot -f', timeout=10)
         time.sleep(60)
-        self.refresh_sdb_server()
+        self.start_sdb_server()
         self._sdb_root_on()
 
     def off(self, powercut_delay=2):
@@ -144,7 +147,7 @@ class devicemock(device):
         """
         logging.debug('flash binaries to device : {}'.format(filenames))
 
-        self.refresh_sdb_server()
+        self.start_sdb_server()
 
         if not filenames:
             raise Exception('There\'s no file to flash.')
@@ -164,4 +167,9 @@ class devicemock(device):
     def refresh_sdb_server(self):
         """docstring for refresh_sdb_server"""
         call('sdb kill-server; sdb start-server', shell=True, timeout=10)
+        time.sleep(1)
+
+    def start_sdb_server(self):
+        """docstring for start_sdb_server"""
+        call('sdb start-server', shell=True, timeout=10)
         time.sleep(1)
