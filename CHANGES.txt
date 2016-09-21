@@ -25,7 +25,9 @@ Version 0.2.1    9 Sep 2016
 - Update mock device type to avoid sdb error
 - Update default templates for u3 and xu3
 
-Version 0.3.0   19 Sep 2016
+Version 0.3.0   21 Sep 2016
 ---------------------------
 - Update projects/topology file location
 - Add projects/topology param at command prompt
+- Support multiple mock devices in topology
+- Add global lock for mock device type
