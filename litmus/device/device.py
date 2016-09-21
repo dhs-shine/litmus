@@ -236,14 +236,14 @@ class device(object):
 
         Example:
             >>> dut.on()
-            >>> dut.run_cmd(['ls','-alF','/','|','grep','usr'])
+            >>> dut.run_cmd('ls -alF / | grep usr')
             \'drwxr-xr-x  15 root root     4096 Apr 29  2016 usr/\\r\\n\'
 
         :returns str: stdout of sdb shell command
 
         """
         c = ['sdb', '-s', self.get_id(), 'shell']
-        c.extend(command)
+        c.extend(convert_single_item_to_list(command))
         logging.debug(c)
         result = check_output(c, timeout=timeout)
         return result

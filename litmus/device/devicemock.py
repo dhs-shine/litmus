@@ -75,7 +75,7 @@ class devicemock(device):
         self.refresh_sdb_server()
         if self._find_device_id() == self.get_id():
             self._sdb_root_on()
-            self.run_cmd(['reboot', '-f'])
+            self.run_cmd('reboot -f')
         time.sleep(60)
         self.refresh_sdb_server()
         self._sdb_root_on()
@@ -150,7 +150,7 @@ class devicemock(device):
             raise Exception('There\'s no file to flash.')
         try:
             self._sdb_root_on()
-            self.run_cmd(['reboot', '-f', 'download'], timeout=10)
+            self.run_cmd('reboot -f download', timeout=10)
             time.sleep(5)
             if flasher == 'lthor':
                 self.thor(filenames=filenames)
