@@ -133,6 +133,52 @@ Lightweight test manager for tizen automated testing
                     time.sleep(retry_delay)
         raise Exception('{} device is not available.'.format(devicetype))
 
+    def acquire_dut_by_name(self, devicename,
+                            max_retry_times=10, retry_delay=10):
+        """
+        Acquire an available device for testing.
+
+        :param str devicename: device name
+        :param int max_retry_times: max retry times for device acquisition
+        :param float retry_delay: delay time for each device acquisition retry
+
+        Example:
+            >>> mgr = manager()
+            >>> dut = mgr.acquire_dut_by_name('XU3_001')
+
+        :returns device: acquired device instance
+        """
+        logging.debug('===============Acquire an available DUT===============')
+
+        candidate = next((dev for dev in self._all_devices
+                          if dev['devicename'] == devicename), None)
+
+        if candidate:
+            for times in range(0, max_retry_times):
+                if not candidate['ilock'].acquired:
+                    gotten_tlock = candidate['tlock'].acquire(blocking=False)
+                    gotten_ilock = candidate['ilock'].acquire(blocking=False)
+                    try:
+                        os.chmod(candidate['ilock'].path, 0o664)
+                    except PermissionError:
+                        logging.debug('Can\'t change lock file permission')
+
+                    # if acquire tlock and ilock, assign a device.
+                    if gotten_tlock and gotten_ilock:
+                        dut = device.create(manager=self, **candidate)
+                        self._duts.append(dut)
+                        logging.debug('{} is assigned.'
+                                      .format(dut.get_name()))
+                        return dut
+                    # if acquire tlock only then release it for next time.
+                    elif gotten_tlock and not gotten_ilock:
+                        candidate['tlock'].release()
+                else:
+                    logging.debug('{} is busy. Wait {} seconds.'
+                                  .format(devicename, retry_delay))
+                    time.sleep(retry_delay)
+        raise Exception('{} is not available.'.format(devicename))
+
     def release_dut(self, dut=None):
         """
         Release acquired devices under test.
@@ -147,7 +193,6 @@ Lightweight test manager for tizen automated testing
             >>> mgr.release_dut()
 
         """
-        # TODO: self._duts.remove(dev) doesn't delete device instance.
         # release all _duts if dut param is None
         if not dut:
             for dev in self._duts:
@@ -243,22 +288,25 @@ Lightweight test manager for tizen automated testing
 
         for section in configparser.sections():
             items = dict(configparser.items(section))
-            items['deviceid'] = section
+            items['devicename'] = section
 
             # Interproces Lock and Thread Lock
             ilock_filename = os.path.join(self._path_for_locks,
-                                          items['deviceid'])
+                                          items['devicename'])
             items['tlock'] = Lock()
             items['ilock'] = fasteners.InterProcessLock(ilock_filename)
 
             # Append items
             self._all_devices.append(items)
 
-        # Add mock device
-        mock_deviceid = 'MOCK_001'
-        mock_ilock_filename = os.path.join(self._path_for_locks, mock_deviceid)
-        mock = {'deviceid': mock_deviceid,
-                'dev_type': 'mock',
-                'tlock': Lock(),
-                'ilock': fasteners.InterProcessLock(mock_ilock_filename)}
-        self._all_devices.append(mock)
+        if not next((d for d in self._all_devices if d['dev_type'] == 'mock'),
+                    None):
+            # Add mock device
+            mock_devicename = 'MOCK_001'
+            mock_ilock_filename = os.path.join(self._path_for_locks,
+                                               mock_devicename)
+            mock = {'devicename': mock_devicename,
+                    'dev_type': 'mock',
+                    'tlock': Lock(),
+                    'ilock': fasteners.InterProcessLock(mock_ilock_filename)}
+            self._all_devices.append(mock)
