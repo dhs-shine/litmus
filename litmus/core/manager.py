@@ -150,29 +150,30 @@ Lightweight test manager for tizen automated testing
         """
         logging.debug('===============Acquire an available DUT===============')
 
-        candidate = next((dev for dev in self._all_devices
-                          if dev['devicename'] == devicename), None)
+        candidate = [dev for dev in self._all_devices
+                      if dev['devicename'] == devicename]
 
         if candidate:
             for times in range(0, max_retry_times):
-                if not candidate['ilock'].acquired:
-                    gotten_tlock = candidate['tlock'].acquire(blocking=False)
-                    gotten_ilock = candidate['ilock'].acquire(blocking=False)
+                for dev in candidate:
+                    if not dev['ilock'].acquired:
+                        gotten_tlock = dev['tlock'].acquire(blocking=False)
+                        gotten_ilock = dev['ilock'].acquire(blocking=False)
                     try:
-                        os.chmod(candidate['ilock'].path, 0o664)
+                        os.chmod(dev['ilock'].path, 0o664)
                     except PermissionError:
                         logging.debug('Can\'t change lock file permission')
 
                     # if acquire tlock and ilock, assign a device.
                     if gotten_tlock and gotten_ilock:
-                        dut = device.create(manager=self, **candidate)
+                        dut = device.create(manager=self, **dev)
                         self._duts.append(dut)
                         logging.debug('{} is assigned.'
                                       .format(dut.get_name()))
                         return dut
                     # if acquire tlock only then release it for next time.
                     elif gotten_tlock and not gotten_ilock:
-                        candidate['tlock'].release()
+                        dev['tlock'].release()
                 else:
                     logging.debug('{} is busy. Wait {} seconds.'
                                   .format(devicename, retry_delay))
