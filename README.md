@@ -7,7 +7,7 @@ Buliding & installing
 
    $ mv litmus litmus-0.3.0
    
-   $ tar cvfz litmus-0.3.0.orig.tar.gz litmus-0.3.0
+   $ tar cvfz litmus_0.3.0.orig.tar.gz litmus-0.3.0
 
 1. Build a deb package with debuild
 
