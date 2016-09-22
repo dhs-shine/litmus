@@ -58,6 +58,11 @@ Lightweight test manager for tizen automated testing
     _remove_workingdir_at__del__ = False
 
     def __init__(self, *args, **kwargs):
+        """
+        :param str topology: topology file path
+        :param str project_path: project path. If this is None then cwd will be used as project path
+        :param bool verbose: init logger to print all logs
+        """
         super(manager, self).__init__()
         self.args = args
         self.kwargs = kwargs
@@ -69,9 +74,9 @@ Lightweight test manager for tizen automated testing
             tp = _duts_
         self._load_configs(tp)
 
-        if 'project_name' in self.kwargs:
+        if 'project_name' in self.kwargs and self.kwargs['project_name']:
             self._project_name = self.kwargs['project_name']
-        if 'project_path' in self.kwargs:
+        if 'project_path' in self.kwargs and self.kwargs['project_path']:
             self._project_path = self.kwargs['project_path']
         else:
             self._project_path = os.getcwd()
@@ -79,6 +84,11 @@ Lightweight test manager for tizen automated testing
             self._workingdir = os.path.abspath(self.kwargs['workingdir'])
         if 'verbose' in self.kwargs and self.kwargs['verbose']:
             init_logger()
+
+        logging.debug('project name: {}'.format(self._project_name))
+        logging.debug('project path: {}'.format(self._project_path))
+        logging.debug('topology path: {}'.format(tp))
+        logging.debug('='*52)
 
     def __del__(self):
         if self._backup_cwd:
@@ -276,8 +286,9 @@ Lightweight test manager for tizen automated testing
                 self._workingdir = workspace_path
                 self._remove_workingdir_at__del__ = True
             logging.debug('working dir: {}'.format(self._workingdir))
-            logging.debug('copy all files in project path to workingdir')
-            copy(self._project_path, os.curdir)
+            if self._project_path:
+                logging.debug('copy all files in project path to workingdir')
+                copy(self._project_path, os.curdir)
         except Exception as e:
             logging.debug(e)
             raise Exception('Can\'t init workingdir.')
