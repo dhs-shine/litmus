@@ -3,7 +3,7 @@ Litmus is an automated testing tool for tizen arm devices.
 Buliding & installing
 ---------------------
 
-1. Change directory name with version postfix and create an orig.tar.gz
+1. Create an orig.tar.gz
 
    $ git clone http://github.com/dhs-shine/litmus
    
