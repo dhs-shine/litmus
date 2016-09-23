@@ -130,7 +130,8 @@ class device(object):
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('turn on device {}'.format(self.get_name()))
+        logging.debug('=================Turn on device {}=================='
+                      .format(self.get_name()))
         retry_cnt = 0
         while retry_cnt <= self._max_attempt_boot_retry:
             try:
@@ -158,7 +159,8 @@ class device(object):
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('turn off device {}'.format(self.get_name()))
+        logging.debug('=================Turn off device {}================='
+                      .format(self.get_name()))
         self._detach_sdb()
         self._cutter.off(powercut_delay)
 
@@ -198,7 +200,8 @@ class device(object):
             >>> dut.flash('platform.tar.gz')
 
         """
-        logging.debug('flash binaries to device : {}'.format(filenames))
+        logging.debug('================Flash binaries to device============')
+        logging.debug(filenames)
 
         if not filenames:
             raise Exception('There\'s no file to flash.')
@@ -231,6 +234,7 @@ class device(object):
         :returns str: stdout of sdb shell command
 
         """
+        logging.debug('================Run a command on device=============')
         c = ['sdb', '-s', self.get_id(), 'shell']
         c.extend(convert_single_item_to_list(command))
         logging.debug(c)
@@ -250,6 +254,7 @@ class device(object):
 
         :returns str: stdout of sdb push command
         """
+        logging.debug('================Push a file to device===============')
         c = ['sdb', '-s', self.get_id(), 'push', src, dest]
         result = check_output(c, timeout=timeout)
         return result
@@ -267,6 +272,7 @@ class device(object):
 
         :returns str: stdout of sdb push command
         """
+        logging.debug('================Pull a file from device=============')
         c = ['sdb', '-s', self.get_id(), 'pull', src, dest]
         result = check_output(c, timeout=timeout)
         return result

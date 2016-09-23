@@ -68,19 +68,24 @@ class devicemock(device):
         """
         return self._id
 
-    def on(self, powercut_delay=2):
+    def on(self, booting_time=None):
         """
         Turn on the device acquired.
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('turn on device {}'.format(self.get_name()))
+        logging.debug('=================Turn on device {}=================='
+                      .format(self.get_name()))
 
         self.start_sdb_server()
         if self.is_on():
             self._sdb_root_on()
             self.run_cmd('reboot -f', timeout=20)
-        time.sleep(self._booting_time)
+        wait_for_boot = booting_time if booting_time else self._booting_time
+        for loop in range(wait_for_boot):
+            logging.debug('Wait {} seconds......'
+                          .format(wait_for_boot - loop))
+            time.sleep(1)
         self.start_sdb_server()
         self._sdb_root_on()
 
@@ -90,7 +95,7 @@ class devicemock(device):
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('turn off device {}'.format(self.get_name()))
+        logging.debug('You can\'t turn off mock type device')
 
     def flash(self, filenames, flasher='lthor', waiting=5,
               partition_bin_mappings={'BOOT': 'zImage',
@@ -112,7 +117,8 @@ class devicemock(device):
             >>> dut.flash('platform.tar.gz')
 
         """
-        logging.debug('flash binaries to device : {}'.format(filenames))
+        logging.debug('================Flash binaries to device============')
+        logging.debug(filenames)
 
         self.start_sdb_server()
 

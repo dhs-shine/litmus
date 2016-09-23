@@ -52,7 +52,7 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
     :returns list: filenames of downloaded binaries
 
     """
-
+    logging.debug('============Download binaries from server===========')
     # convert latest url to actual url
     url_to_find_latest_version_number = url.split('latest')[0]
 
@@ -156,7 +156,7 @@ def install_plugin(dut, script, waiting=5, timeout=180):
         >>> install_plugin(dut,
                            script='install-set/setup')
     """
-
+    logging.debug('================Install plugins=================')
     dut.on()
 
     script_path = '/'.join(script.split('/')[:-1])
@@ -202,6 +202,12 @@ def install_plugin_from_git(dut, url, branch, script, tmpdir='repo',
 
 
     """
+    logging.debug('=============Install plugins from git===============')
+    logging.debug('plugin git path : {}'.format(url))
+    logging.debug('plugin git branch : {}'.format(branch))
+    logging.debug('plugin git commitid : {}'
+                  .format(commitid if commitid else 'latest'))
+    logging.debug('plugin install script : {}'.format(script))
     dut.on()
 
     call('git clone {0} {1} --branch {2}'.format(url, tmpdir, branch),

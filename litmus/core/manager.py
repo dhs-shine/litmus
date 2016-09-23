@@ -66,7 +66,6 @@ Lightweight test manager for tizen automated testing
         super(manager, self).__init__()
         self.args = args
         self.kwargs = kwargs
-        logging.debug(self._comment)
 
         if 'topology' in self.kwargs and self.kwargs['topology']:
             tp = self.kwargs['topology']
@@ -85,10 +84,10 @@ Lightweight test manager for tizen automated testing
         if 'verbose' in self.kwargs and self.kwargs['verbose']:
             init_logger()
 
+        logging.debug(self._comment)
         logging.debug('project name: {}'.format(self._project_name))
         logging.debug('project path: {}'.format(self._project_path))
         logging.debug('topology path: {}'.format(tp))
-        logging.debug('='*52)
 
     def __del__(self):
         if self._backup_cwd:
@@ -111,7 +110,7 @@ Lightweight test manager for tizen automated testing
 
         :returns device: acquired device instance
         """
-        logging.debug('===============Acquire an available DUT===============')
+        logging.debug('==============Acquire an available DUT==============')
 
         candidates = [dev for dev in self._all_devices
                       if dev['dev_type'] == devicetype]
@@ -158,7 +157,7 @@ Lightweight test manager for tizen automated testing
 
         :returns device: acquired device instance
         """
-        logging.debug('===============Acquire an available DUT===============')
+        logging.debug('==============Acquire an available DUT==============')
 
         candidate = [dev for dev in self._all_devices
                       if dev['devicename'] == devicename]
@@ -204,6 +203,7 @@ Lightweight test manager for tizen automated testing
             >>> mgr.release_dut()
 
         """
+        logging.debug('================Release acquired DUT================')
         # release all _duts if dut param is None
         if not dut:
             for dev in self._duts:
@@ -271,6 +271,7 @@ Lightweight test manager for tizen automated testing
             >>> mgr.get_workingdir()
             '/home/user/Workspace/test'
         """
+        logging.debug('============Initialize working directory============')
         if workingdir:
             self._workingdir = os.path.abspath(workingdir)
         try:
@@ -287,7 +288,8 @@ Lightweight test manager for tizen automated testing
                 self._remove_workingdir_at__del__ = True
             logging.debug('working dir: {}'.format(self._workingdir))
             if self._project_path:
-                logging.debug('copy all files in project path to workingdir')
+                logging.debug('project_path: {}'.format(self._project_path))
+                logging.debug('copy all files from project path to workingdir')
                 copy(self._project_path, os.curdir)
         except Exception as e:
             logging.debug(e)
