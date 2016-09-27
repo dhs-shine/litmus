@@ -312,15 +312,3 @@ Lightweight test manager for tizen automated testing
 
             # Append items
             self._all_devices.append(items)
-
-        if not next((d for d in self._all_devices if d['dev_type'] == 'mock'),
-                    None):
-            # Add mock device
-            mock_devicename = 'MOCK_001'
-            mock_ilock_filename = os.path.join(self._path_for_locks,
-                                               mock_devicename)
-            mock = {'devicename': mock_devicename,
-                    'dev_type': 'mock',
-                    'tlock': Lock(),
-                    'ilock': fasteners.InterProcessLock(mock_ilock_filename)}
-            self._all_devices.append(mock)

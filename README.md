@@ -6,7 +6,7 @@ Prerequisite
 Litmus uses sdb to communicate with device.
 sdb is not released on download.tizen.org/tools but you can find it from sdk.
 
-Installing sdb from tizen sdk or download binary from below url.
+Install sdb from tizen sdk or download binary from below url.
 
 32bit:
 http://download.tizen.org/sdk/sdk-packages/official/binary/sdb_2.2.83_ubuntu-32.zip

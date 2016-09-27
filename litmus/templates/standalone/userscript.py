@@ -15,13 +15,16 @@ def main(*args, **kwargs):
     mgr.init_workingdir()
 
     # get projectinfo
-    project_info = load_yaml('conf.yaml')
+    project_info = load_yaml('conf_mobile.yaml')
+    #project_info = load_yaml('conf_wearable.yaml')
+    #project_info = load_yaml('conf_tv.yaml')
 
     username = project_info['username']
     password = project_info['password']
     binary_urls = project_info['binary_urls']
 
     # get version from parameter
+    # ex) 20160923.3
     try:
         version = kwargs['param'][0]
     except (IndexError, TypeError):
@@ -36,7 +39,8 @@ def main(*args, **kwargs):
                                     version=version))
 
     # get an available device for testing.
-    dut = mgr.acquire_dut('mock', max_retry_times=180)
+    dut = mgr.acquire_dut('standalone', max_retry_times=180)
+    #dut = mgr.acquire_dut_by_name('MyTM1', max_retry_times=180)
 
     # flashing binaries to device.
     dut.flash(filenames)
@@ -48,7 +52,9 @@ def main(*args, **kwargs):
     if not os.path.exists('result'):
         os.mkdir('result')
 
-    testcases = load_yaml('tc.yaml')
+    testcases = load_yaml('tc_mobile.yaml')
+    #testcases = load_yaml('tc_wearable.yaml')
+    #testcases = load_yaml('tc_tv.yaml')
     add_test_helper(dut, testcases)
     dut.run_tests()
 

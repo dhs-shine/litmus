@@ -20,7 +20,7 @@ from litmus.core.util import check_output, find_pattern
 from litmus.core.util import call
 
 
-class devicemock(device):
+class devicestandalone(device):
     """
     Litmus device class.
     User can control device in topology by this class methods.
@@ -95,7 +95,7 @@ class devicemock(device):
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('You can\'t turn off mock type device')
+        logging.debug('You can\'t turn off standalone type device')
 
     def flash(self, filenames, flasher='lthor', waiting=5,
               partition_bin_mappings={'BOOT': 'zImage',

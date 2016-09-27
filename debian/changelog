@@ -8,15 +8,15 @@ litmus (0.3.0-1) unstable; urgency=low
 
   * Update projects/topology file location
   * Add projects/topology param at command prompt
-  * Support multiple mock devices in topology
-  * Add global lock for mock device type
+  * Support multiple standalone devices in topology
+  * Add global lock for standalone device type
 
  -- Donghoon Shin <dhs.shin@samsung.com>  Wed, 21 Sep 2016 15:08:00 +0900
 
 litmus (0.2.1-1) unstable; urgency=low
 
   * Update import command to use shell-like path expansions
-  * Update mock device type to avoid sdb error
+  * Update standalone device type to avoid sdb error
   * Update default templates for u3 and xu3
 
  -- Donghoon Shin <dhs.shin@samsung.com>  Fri,  9 Sep 2016 15:00:00 +0900
@@ -24,7 +24,7 @@ litmus (0.2.1-1) unstable; urgency=low
 litmus (0.2.0-1) unstable; urgency=low
 
   * Remove acmlock routine to imporve test performance
-  * Support flash function for mock device type
+  * Support flash function for standalone device type
   * Update test helper functions
 
  -- Donghoon Shin <dhs.shin@samsung.com>  Fri,  9 Sep 2016 10:03:05 +0900
