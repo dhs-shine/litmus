@@ -1,5 +1,6 @@
 Litmus is an automated testing tool for tizen arm devices.
 
+
 Prerequisite
 ---------------------
 
@@ -9,10 +10,10 @@ sdb is not released on download.tizen.org/tools but you can find it from sdk.
 Install sdb from tizen sdk or download binary from below url.
 
 32bit:
-http://download.tizen.org/sdk/sdk-packages/official/binary/sdb_2.2.83_ubuntu-32.zip
+http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.2.89_ubuntu-32.zip
 
 64bit:
-http://download.tizen.org/sdk/sdk-packages/official/binary/sdb_2.2.83_ubuntu-64.zip
+http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.2.89_ubuntu-64.zip
 
 Unzip this package and copy sdb binary to /usr/bin
 
@@ -42,16 +43,18 @@ Getting started
 
 1. Create a litmus project:
 
-   $ litmus mk myproject
+   $ litmus mk <new_project_name>
 
 2. Modify <project_path>/userscript.py and <project_path>/conf.yaml
 
 3. Run the litmus project
 
-   $ litmus run myproject
+   $ litmus run <new_project_name>
 
 
 Please refer to litmus wiki for more details.
 
+
 https://github.com/dhs-shine/litmus/wiki
+
 https://wiki.tizen.org/wiki/Litmus
