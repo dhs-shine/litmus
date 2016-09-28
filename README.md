@@ -43,13 +43,13 @@ Getting started
 
 1. Create a litmus project:
 
-   $ litmus mk <new_project_name>
+   $ litmus mk [project_name]
 
-2. Modify <project_path>/userscript.py and <project_path>/conf.yaml
+2. Modify [project_path]/userscript.py and [project_path]/conf.yaml
 
 3. Run the litmus project
 
-   $ litmus run <new_project_name>
+   $ litmus run [project_name]
 
 
 Please refer to litmus wiki for more details.
