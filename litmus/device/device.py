@@ -200,7 +200,8 @@ class device(object):
             >>> dut.flash('platform.tar.gz')
 
         """
-        logging.debug('================Flash binaries to device============')
+        logging.debug('==============Flash binaries to device {}==========='
+                      .format(self.get_name()))
         logging.debug(filenames)
 
         if not filenames:
@@ -234,7 +235,8 @@ class device(object):
         :returns str: stdout of sdb shell command
 
         """
-        logging.debug('================Run a command on device=============')
+        logging.debug('==============Run a command on device {}============'
+                      .format(self.get_name()))
         c = ['sdb', '-s', self.get_id(), 'shell']
         c.extend(convert_single_item_to_list(command))
         logging.debug(c)
@@ -254,7 +256,10 @@ class device(object):
 
         :returns str: stdout of sdb push command
         """
-        logging.debug('================Push a file to device===============')
+        logging.debug('==============Push a file to device {}=============='
+                      .format(self.get_name()))
+        logging.debug('src from host : {}'.format(src))
+        logging.debug('dest on dut: {}'.format(dest))
         c = ['sdb', '-s', self.get_id(), 'push', src, dest]
         result = check_output(c, timeout=timeout)
         return result
@@ -272,7 +277,10 @@ class device(object):
 
         :returns str: stdout of sdb push command
         """
-        logging.debug('================Pull a file from device=============')
+        logging.debug('==============Pull a file from device {}============'
+                      .format(self.get_name()))
+        logging.debug('src from dut : {}'.format(src))
+        logging.debug('dest on host: {}'.format(dest))
         c = ['sdb', '-s', self.get_id(), 'pull', src, dest]
         result = check_output(c, timeout=timeout)
         return result
