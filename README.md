@@ -31,7 +31,7 @@ Buliding & installing
    
    $ debuild
 
-2. Install the deb package using dpkg
+2. Install the deb package by using dpkg
 
    $ cd ..
    
