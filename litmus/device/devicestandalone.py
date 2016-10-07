@@ -95,7 +95,7 @@ class devicestandalone(device):
 
         :param float powercut_delay: power-cut delay for cutter
         """
-        logging.debug('You can\'t turn off standalone type device')
+        logging.debug('off function is not supported for standalone device')
 
     def flash(self, filenames, flasher='lthor', waiting=5,
               partition_bin_mappings={'BOOT': 'zImage',

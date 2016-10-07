@@ -1,0 +1,32 @@
+testcases:
+  - name: verify_process_is_running
+    from: litmus.helper.tests
+    result_dir: result
+    plan:
+      - name: dbus_is_running
+        param: dbus
+        pattern: .*/usr/bin/dbus-daemon.*
+      - name: enlightenment_is_running
+        param: enlightenment
+        pattern: .*/usr/bin/enlightenment.*
+      - name: sensord_is_running
+        param: sensord
+        pattern: .*/usr/bin/sensord.*
+      - name: deviced_is_running
+        param: deviced
+        pattern: .*/usr/bin/deviced.*
+      - name: pulseaudio_is_running
+        param: pulseaudio
+        pattern: .*/usr/bin/pulseaudio.*
+      - name: sdbd_is_running
+        param: sdbd
+        pattern: .*/usr/sbin/sdbd.*
+      - name: alarm-server_is_running
+        param: alarm-server
+        pattern: .*/usr/bin/alarm-server.*
+      - name: sound_server_is_running
+        param: sound_server
+        pattern: .*/usr/bin/sound_server.*
+      - name: media-server_is_running
+        param: media-server
+        pattern: .*/usr/bin/media-server.*

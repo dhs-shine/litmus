@@ -18,6 +18,7 @@ import sys
 import time
 import logging
 import requests
+import litmus
 import urllib.parse
 from bs4 import BeautifulSoup
 from litmus.core.util import find_pattern, find_all_pattern
@@ -173,10 +174,11 @@ def install_plugin(dut, script, waiting=5, timeout=180):
 
 
 import os
+import tempfile
 import shutil
 from subprocess import DEVNULL
 
-def install_plugin_from_git(dut, url, branch, script, tmpdir='repo',
+def install_plugin_from_git(dut, url, branch, script,
                             waiting=5, timeout=180, commitid=None):
     """
     Clone a git project which include tizen plugins and install the plugins on device.
@@ -186,7 +188,6 @@ def install_plugin_from_git(dut, url, branch, script, tmpdir='repo',
     :param str url: url for git project
     :param str branch: branch name of the git project
     :param str script: script path to install plugins on device
-    :param str tmpdir: temporary directory to clone the git project
     :param float waiting: wait time before installing plugins
     :param float timeout: timeout
     :param str commitid: commitid which you want to clone
@@ -210,6 +211,8 @@ def install_plugin_from_git(dut, url, branch, script, tmpdir='repo',
     logging.debug('plugin install script : {}'.format(script))
     dut.on()
 
+    tmpdir = next(tempfile._get_candidate_names())
+
     call('git clone {0} {1} --branch {2}'.format(url, tmpdir, branch),
          shell=True)
 
@@ -220,15 +223,13 @@ def install_plugin_from_git(dut, url, branch, script, tmpdir='repo',
     call('find ./{0} -exec perl -pi -e "s/sdb\s+(-d\s+)*(root|shell|push|pull)/sdb -s {1} \\2/g" {{}} \;'.format(tmpdir, dut.get_id()), stderr=DEVNULL, shell=True)
     call('find ./{0} -exec perl -pi -e "s/sdb\s+.*reboot.*//g" {{}} \;'.format(tmpdir), stderr=DEVNULL, shell=True)
 
-    script = os.path.join(tmpdir, script)
-
     script_path = '/'.join(script.split('/')[:-1])
     script_name = script.split('/')[-1]
-    call('cp -R {0}/* .'.format(script_path), shell=True)
 
     time.sleep(waiting)
 
-    call('sh {0}'.format(script_name).split(), timeout=timeout)
+    call('cd {0}/{1} && sh {2}'.format(tmpdir, script_path, script_name),
+         shell=True, timeout=timeout)
     shutil.rmtree(tmpdir)
 
     dut.off()

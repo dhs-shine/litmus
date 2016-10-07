@@ -12,13 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
 
-__version__ = '0.3.2'
-_homedir_ = os.path.expanduser('~')
-_confdir_ = os.path.join(_homedir_, '.litmus')
-_duts_ = os.path.join(_confdir_, 'topology')
-_projects_ = os.path.join(_confdir_, 'projects')
-_tmpdir_ = '/tmp'
-_path_for_locks_ = '/var/lock/litmus/'
-_dev_types_ = ('u3', 'xu3', 'artik5', 'artik10', 'standalone', 'empty')
+from litmus.device.deviceartik10 import deviceartik10
+
+
+class deviceartik5(deviceartik10):
+    """docstring for device"""
+    _pattern_bootprompt = r'ARITK.*# .*'

@@ -13,13 +13,13 @@ Version 0.1.1   27 Jun 2016
 - Turn off device if keyboard interrupt is raised while flashing or turning on device
 - Add timeout for all call/check_output to avoid hang issue
 
-Version 0.2.0    9 Sep 2016
+Version 0.2.0   09 Sep 2016
 ---------------------------
 - Remove acmlock routine to improve test performance
 - Support flash function for standalone device type
 - Update test helper functions
 
-Version 0.2.1    9 Sep 2016
+Version 0.2.1   09 Sep 2016
 ---------------------------
 - Update import command to use shell-like path expansions
 - Update standalone device type to avoid sdb error
@@ -35,3 +35,7 @@ Version 0.3.0   21 Sep 2016
 Version 0.3.1   22 Sep 2016
 ---------------------------
 - Update cmd_rm handler
+
+Version 0.3.2   07 Oct 2016
+---------------------------
+- Support artik and more standalone device types

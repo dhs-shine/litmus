@@ -214,7 +214,7 @@ class device(object):
             busid = self._find_usb_busid()
             self._release_global_lock()
             self._lthor(filenames=filenames, busid=busid)
-            self._cutter.off()
+            self.off()
         except (Exception, KeyboardInterrupt) as e:
             self._release_global_lock()
             logging.debug(e)
@@ -520,14 +520,8 @@ class device(object):
             time.sleep(0.3)
             self._write_uart(b''.join([b'echo 1 > ', usb0_path, b'/enable']))
             time.sleep(0.3)
-
-        def check_funcs_sconf():
-            """docstring for check_funcs_sconf"""
-            self._write_uart(b''.join([b'cat ', usb0_path, b'/funcs_sconf']))
-            time.sleep(0.3)
             self._write_uart(b''.join([b'cat ', usb0_path, b'/enable']))
             time.sleep(0.3)
-            self._read_uart(bufsize=1000)
 
         def get_serialnumber():
             """docstring for get_serialnumber"""
@@ -538,7 +532,6 @@ class device(object):
         retrycnt = 0
         while retrycnt < 10:
             set_serialnumber(deviceid=self.get_id().encode())
-            check_funcs_sconf()
             serialnumber = get_serialnumber()
             if find_pattern(pattern, serialnumber):
                 return

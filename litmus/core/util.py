@@ -182,6 +182,6 @@ def load_yaml(filename):
 
     :returns dict: parsed yaml data
     """
-    with open(filename, 'r') as stream:
+    with open(os.path.expanduser(filename), 'r') as stream:
         data = yaml.load(stream)
     return data

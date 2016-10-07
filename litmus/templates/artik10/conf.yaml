@@ -1,0 +1,5 @@
+binary_urls:
+  - http://download.tizen.org/snapshots/tizen/common/latest/images/arm-wayland/common-wayland-3parts-armv7l-artik/
+  - http://download.tizen.org/snapshots/tizen/common/latest/images/arm-wayland/common-boot-armv7l-artik10/
+username: <username>
+password: <password>
