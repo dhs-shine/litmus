@@ -17,7 +17,9 @@ import os
 import time
 import serial
 import logging
+import tempfile
 import fasteners
+from PIL import Image
 from threading import Thread, Lock
 from litmus.core.util import call, check_output
 from litmus.core.util import convert_single_item_to_list
@@ -52,6 +54,8 @@ class device(object):
     _max_attempt_boot_retry = 3
     _boot_timeout = 50.0
     _path_for_locks = _path_for_locks_
+    _screen_width = 1920
+    _screen_height = 1080
 
     _cutter = None
     _uart = None
@@ -349,7 +353,86 @@ class device(object):
             elif isinstance(l['args'], tuple):
                 l['func'](self, *l['args'])
 
+    def screenshot(self, filename):
+        """
+        Take a screenshot (png format)
+
+        :param str filename: screenshot file name
+
+        Example:
+            >>> dut.screenshot('screenshot.png')
+
+        """
+        logging.debug('==== Take a screenshot: {}, width: {}, height: {} ===='
+                      .format(filename,
+                              self._screen_width,
+                              self._screen_height))
+        dt = self._get_display_server_type()
+        if dt == 'X11':
+            self._screenshot_x11(filename)
+        elif dt == 'WAYLAND':
+            self._screenshot_wayland(filename)
+
     # private methods.
+    def _get_display_server_type(self):
+        """docstring for get_display_server_type"""
+        res = self.run_cmd('ls /usr/lib', timeout=10)
+        if find_pattern('.*libX11.*', res):
+            return 'X11'
+        else:
+            return 'WAYLAND'
+
+    def _screenshot_x11(self, filename):
+        """docstring for _screenshot_x11"""
+        # take a screenshot using xwd
+        cmd = 'xwd -root -out /tmp/{}.xwd'.format(filename)
+        self.run_cmd(cmd, timeout=20)
+
+        # pull xwd file
+        self.pull_file('/tmp/{}.xwd'.format(filename), os.curdir, timeout=20)
+
+        # convert xwd to png and resize it
+        call(['convert', '{0}.xwd'.format(filename), '-resize',
+              '{0}x{1}'.format(self._screen_width, self._screen_height),
+              filename], timeout=20)
+        call(['rm', '{}.xwd'.format(filename)], timeout=20)
+
+    def _screenshot_wayland(self, filename):
+        """docstring for _screenshot_wayland"""
+        # Find all viewable window id
+        p_winid = '.*(0x[a-zA-Z0-9]{8})\s+\d+\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+).*\sViewable.*'
+        winids = find_all_pattern(p_winid,
+                                  self.run_cmd('enlightenment_info -topvwins',
+                                               timeout=20))
+        if winids:
+            # Dump windows
+            outs = self.run_cmd('enlightenment_info -dump_topvwins',
+                                timeout=20)
+            dirn = find_pattern('directory:\s(.*)',
+                                outs,
+                                groupindex=1).rstrip()
+
+            # Create tempdir and pull dump files
+            tmpdir = tempfile.mkdtemp()
+            self.pull_file(dirn, tmpdir, timeout=20)
+
+            # If dump does not exist then remove winid from list
+            winids = [winid for winid in winids
+                      if os.path.exists(os.path.join(tmpdir, winid[0]+'.png'))]
+
+            # Base image
+            bg = Image.new('RGB', (self._screen_width, self._screen_height))
+            # Merge images
+            for winid in reversed(winids):
+                try:
+                    fg = Image.open(os.path.join(tmpdir, winid[0]+'.png'))
+                    bg.paste(fg, (int(winid[1]), int(winid[2])), fg)
+                except FileNotFoundError:
+                    pass
+            # Save merged image
+            bg.save(filename)
+            # Remove tempdir
+            call(['rm', '-rf', tmpdir], timeout=10)
 
     def _flush_uart_buffer(self):
         """docstring for flush_uart_buffer"""

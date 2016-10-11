@@ -18,7 +18,6 @@ import sys
 import time
 import logging
 import requests
-import litmus
 import urllib.parse
 from bs4 import BeautifulSoup
 from litmus.core.util import find_pattern, find_all_pattern
@@ -173,7 +172,6 @@ def install_plugin(dut, script, waiting=5, timeout=180):
     dut.off()
 
 
-import os
 import tempfile
 import shutil
 from subprocess import DEVNULL

@@ -18,5 +18,5 @@ from litmus.device.devicestandalone import devicestandalone
 
 class devicestandalone_z1(devicestandalone):
     """docstring for device"""
-    pass
-
+    _screen_width = 480
+    _screen_height = 800
