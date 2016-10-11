@@ -19,3 +19,5 @@ from litmus.device.deviceartik10 import deviceartik10
 class deviceartik5(deviceartik10):
     """docstring for device"""
     _pattern_bootprompt = r'ARITK.*# .*'
+    _screen_width = 480
+    _screen_height = 800

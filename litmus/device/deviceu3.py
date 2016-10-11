@@ -19,4 +19,3 @@ from litmus.device.device import device
 class deviceu3(device):
     """docstring for device"""
     pass
-

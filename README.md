@@ -35,7 +35,7 @@ Buliding & installing
 
    $ cd ..
    
-   $ sudo dpkg -i litmus_0.3.1-1_amd64.deb
+   $ sudo dpkg -i litmus_0.3.3-1_amd64.deb
 
 
 Getting started

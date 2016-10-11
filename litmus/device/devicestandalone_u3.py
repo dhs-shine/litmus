@@ -19,4 +19,3 @@ from litmus.device.devicestandalone import devicestandalone
 class devicestandalone_u3(devicestandalone):
     """docstring for device"""
     pass
-
