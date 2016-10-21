@@ -1,3 +1,9 @@
+litmus (0.3.4-1) unstable; urgency=low
+
+  * Update flash method for tw1 to skip passing parameter 'flasher'
+
+ -- Donghoon Shin <dhs.shin@samsung.com>  Fri, 21 Oct 2016 11:36:00 +0900
+
 litmus (0.3.3-1) unstable; urgency=low
 
   * Support device.screenshot API

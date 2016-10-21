@@ -43,3 +43,7 @@ Version 0.3.2   07 Oct 2016
 Version 0.3.3   11 Oct 2016
 ---------------------------
 - Support device.screenshot() API
+
+Version 0.3.4   21 Oct 2016
+---------------------------
+- Update flash method for tw1 to skip passing parameter 'flasher'

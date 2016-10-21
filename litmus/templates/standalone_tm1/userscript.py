@@ -16,8 +16,6 @@ def main(*args, **kwargs):
 
     # get projectinfo
     project_info = load_yaml('conf_mobile.yaml')
-    #project_info = load_yaml('conf_wearable.yaml')
-    #project_info = load_yaml('conf_tv.yaml')
 
     username = project_info['username']
     password = project_info['password']
@@ -39,8 +37,7 @@ def main(*args, **kwargs):
                                     version=version))
 
     # get an available device for testing.
-    dut = mgr.acquire_dut('standalone', max_retry_times=180)
-    #dut = mgr.acquire_dut_by_name('MyTM1', max_retry_times=180)
+    dut = mgr.acquire_dut('standalone_tm1', max_retry_times=180)
 
     # flashing binaries to device.
     dut.flash(filenames)
@@ -53,8 +50,6 @@ def main(*args, **kwargs):
         os.mkdir('result')
 
     testcases = load_yaml('tc_mobile.yaml')
-    #testcases = load_yaml('tc_wearable.yaml')
-    #testcases = load_yaml('tc_tv.yaml')
     add_test_helper(dut, testcases)
     dut.run_tests()
 

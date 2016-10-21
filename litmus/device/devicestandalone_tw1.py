@@ -20,3 +20,12 @@ class devicestandalone_tw1(devicestandalone):
     """docstring for device"""
     _screen_width = 360
     _screen_height = 360
+
+    def flash(self, filenames, flasher='heimdall', waiting=5,
+              partition_bin_mappings={'BOOT': 'zImage',
+                                      'ROOTFS': 'rootfs.img',
+                                      'USER': 'user.img',
+                                      'SYSTEM-DATA': 'system-data.img'}):
+        """docstring for flash"""
+        super(devicestandalone_tw1, self).flash(filenames, flasher, waiting,
+                                                partition_bin_mappings)

@@ -14,11 +14,13 @@
 # limitations under the License.
 import os
 
-__version__ = '0.3.3'
+__version__ = '0.3.4'
 _homedir_ = os.path.expanduser('~')
 _confdir_ = os.path.join(_homedir_, '.litmus')
 _duts_ = os.path.join(_confdir_, 'topology')
 _projects_ = os.path.join(_confdir_, 'projects')
 _tmpdir_ = '/tmp'
 _path_for_locks_ = '/var/lock/litmus/'
-_dev_types_ = ('u3', 'xu3', 'artik5', 'artik10', 'standalone', 'empty')
+_dev_types_ = ('u3', 'xu3', 'artik5', 'artik10',
+               'standalone_tm1', 'standalone_tm2', 'standalone_tw1',
+               'standalone_u3', 'standalone_xu3', 'empty')
