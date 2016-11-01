@@ -160,7 +160,7 @@ Lightweight test manager for tizen automated testing
         logging.debug('==============Acquire an available DUT==============')
 
         candidate = [dev for dev in self._all_devices
-                      if dev['devicename'] == devicename]
+                     if dev['devicename'] == devicename]
 
         if candidate:
             for times in range(0, max_retry_times):

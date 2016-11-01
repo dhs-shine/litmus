@@ -479,7 +479,7 @@ class device(object):
         """docstring for find_usb_busid"""
         pattern = 'usb (.*):.*idVendor={0}, idProduct={1}'.format(self._vid,
                                                                   self._pid)
-        kernlog = 'cat /var/log/kern.log | grep usb | tail -n 20'
+        kernlog = 'dmesg | grep usb | tail -n 20'
         outs = check_output(kernlog, shell=True, timeout=10)
         result = find_all_pattern(pattern=pattern, data=outs)
         if result:
@@ -505,7 +505,7 @@ class device(object):
         """docstring for _find_usb_bus_and_device_address"""
         pattern = 'usb (.*):.*idVendor={0}, idProduct={1}'.format(self._vid,
                                                                   self._pid)
-        kernlog = 'cat /var/log/kern.log | grep usb | tail -n 20'
+        kernlog = 'dmesg | grep usb | tail -n 20'
         outs = check_output(kernlog, shell=True, timeout=10)
         result = find_all_pattern(pattern=pattern, data=outs)
         if result:

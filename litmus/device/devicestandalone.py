@@ -139,7 +139,7 @@ class devicestandalone(device):
                 self._heimdall(filenames=filenames,
                                busaddr=busaddr,
                                devaddr=devaddr,
-                              partition_bin_mappings=partition_bin_mappings)
+                               partition_bin_mappings=partition_bin_mappings)
         except (Exception, KeyboardInterrupt) as e:
             self._release_global_lock()
             logging.debug(e)
