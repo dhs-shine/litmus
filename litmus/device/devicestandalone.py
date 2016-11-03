@@ -79,7 +79,7 @@ class devicestandalone(device):
 
         self.start_sdb_server()
         if self.is_on():
-            self._sdb_root_on()
+            self.sdb_root_on()
             self.run_cmd('reboot -f', timeout=20)
         wait_for_boot = booting_time if booting_time else self._booting_time
         for loop in range(wait_for_boot):
@@ -87,7 +87,7 @@ class devicestandalone(device):
                           .format(wait_for_boot - loop))
             time.sleep(1)
         self.start_sdb_server()
-        self._sdb_root_on()
+        self.sdb_root_on()
 
     def off(self, powercut_delay=2):
         """
@@ -125,7 +125,7 @@ class devicestandalone(device):
         if not filenames:
             raise Exception('There\'s no file to flash.')
         try:
-            self._sdb_root_on()
+            self.sdb_root_on()
             self._acquire_global_lock()
             self.run_cmd('reboot -f download', timeout=20)
             time.sleep(waiting)

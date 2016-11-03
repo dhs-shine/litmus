@@ -138,7 +138,7 @@ class deviceartik10(device):
                 self._login_uart_shell()
                 self._set_sdb_deviceid()
                 self._attach_sdb()
-                self._sdb_root_on()
+                self.sdb_root_on()
                 return
             except KeyboardInterrupt:
                 raise Exception('Keyboard interrupt.')

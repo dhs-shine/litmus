@@ -145,7 +145,7 @@ class device(object):
                 self._login_uart_shell()
                 self._set_sdb_deviceid()
                 self._attach_sdb()
-                self._sdb_root_on()
+                self.sdb_root_on()
                 return
             except KeyboardInterrupt:
                 self.off(1)
@@ -646,8 +646,10 @@ class device(object):
         """docstring for _detach_sdb"""
         pass
 
-    def _sdb_root_on(self):
-        """docstring for _sdb_root_on"""
+    def sdb_root_on(self):
+        """docstring for sdb_root_on"""
+        logging.debug('=================sdb root on for {}================='
+                      .format(self.get_name()))
         call('sdb -s {} root on'.format(self.get_id()).split(), timeout=10)
         time.sleep(0.5)
 
