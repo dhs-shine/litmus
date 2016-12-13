@@ -24,10 +24,10 @@ from litmus import __version__, _path_for_locks_, _duts_, _projects_, _confdir_
 from litmus.core.util import init_logger
 
 
-def sigterm_handler(signal, frame):
-    """docstring for sigterm_handler"""
-    raise Exception('SIGTERM')
-    sys.exit(1)
+#def sigterm_handler(signal, frame):
+#    """docstring for sigterm_handler"""
+#    raise Exception('SIGTERM')
+#    sys.exit(1)
 
 
 def subparser(func):
@@ -224,7 +224,7 @@ if __name__ == '__main__':
         init_logger()
         init_lockdir()
         init_confdir()
-        signal.signal(signal.SIGTERM, sigterm_handler)
+        #signal.signal(signal.SIGTERM, sigterm_handler)
         sys.exit(main(sys.argv))
     except KeyboardInterrupt:
         raise Exception('KeyboardInterrupt')
