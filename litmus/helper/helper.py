@@ -141,40 +141,10 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
     return filenames
 
 
-def install_plugin(dut, script, waiting=5, timeout=180):
-    """
-    Install tizen plugins on device.
-    This helper function turn on device and turn off device automatically.
-
-    :param device dut: device instance
-    :param str script: script path to install plugins on device
-    :param float waiting: wait time before installing plugins
-    :param float timeout: timeout
-
-    Example:
-        >>> from litmus.helper.helper import install_plugin
-        >>> install_plugin(dut,
-                           script='install-set/setup')
-    """
-    logging.debug('================Install plugins=================')
-    dut.on()
-
-    script_path = '/'.join(script.split('/')[:-1])
-    script_name = script.split('/')[-1]
-
-    call('cp -R {0}/* .'.format(script_path), shell=True)
-
-    time.sleep(waiting)
-
-    call('sh {0} {1}'.format(script_name, dut.get_id()).split(),
-         timeout=timeout)
-
-    dut.off()
-
-
 import tempfile
 import shutil
 from subprocess import DEVNULL
+
 
 def install_plugin_from_git(dut, url, branch, script,
                             waiting=5, timeout=180, commitid=None):
