@@ -15,13 +15,16 @@ def main(*args, **kwargs):
     mgr.init_workingdir()
 
     # get projectinfo
-    project_info = load_yaml('conf.yaml')
+    project_info = load_yaml('conf_tv.yaml')
 
     username = project_info['username']
     password = project_info['password']
     binary_urls = project_info['binary_urls']
 
     # get version from parameter
+    # ex) 20160923.3
+    # you can customize params from litmus (adhoc|run) -p option
+    # Nth arg : kwargs['param'][N]
     try:
         version = kwargs['param'][0]
     except (IndexError, TypeError):
@@ -48,7 +51,7 @@ def main(*args, **kwargs):
     if not os.path.exists('result'):
         os.mkdir('result')
 
-    testcases = load_yaml('tc.yaml')
+    testcases = load_yaml('tc_tv.yaml')
     add_test_helper(dut, testcases)
     dut.run_tests()
 

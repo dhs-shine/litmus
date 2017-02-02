@@ -23,6 +23,8 @@ def main(*args, **kwargs):
 
     # get version from parameter
     # ex) 20160923.3
+    # you can customize params from litmus (adhoc|run) -p option
+    # Nth arg : kwargs['param'][N]
     try:
         version = kwargs['param'][0]
     except (IndexError, TypeError):
@@ -37,6 +39,13 @@ def main(*args, **kwargs):
                                     version=version))
 
     # get an available device for testing.
+    # Please set up topology before acquiring device.
+    # Example)
+    # ~/.litmus/topology
+    # [TW1_001]
+    # dev_type = standalone_tw1
+    # serialno = 01234TEST
+
     dut = mgr.acquire_dut('standalone_tw1', max_retry_times=180)
 
     # flashing binaries to device.

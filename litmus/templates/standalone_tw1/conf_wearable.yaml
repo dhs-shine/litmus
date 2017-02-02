@@ -1,4 +1,4 @@
 binary_urls:
-    - http://download.tizen.org/snapshots/tizen/wearable/latest/images/target-circle/wearable-wayland-armv7l-circle/
+  - http://download.tizen.org/snapshots/tizen/wearable/latest/images/target-circle/wearable-wayland-armv7l-circle/
 username: <username>
 password: <password>
