@@ -15,7 +15,6 @@
 include AUTHORS
 include README.md
 include LICENSE.APLv2
-include CHANGES.txt
 include MANIFEST.in
 include setup.py
 recursive-include litmus/templates *

@@ -1,4 +1,4 @@
 binary_urls:
-    - http://download.tizen.org/snapshots/tizen/mobile/latest/images/arm64-wayland/mobile-wayland-arm64-tm2/
+  - http://download.tizen.org/snapshots/tizen/mobile/latest/images/arm64-wayland/mobile-wayland-arm64-tm2/
 username: <username>
 password: <password>

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from configparser import RawConfigParser
+from litmus.core.util import call
 
 
 def load_project_list(projects):
@@ -27,3 +28,11 @@ def load_project_list(projects):
         item['name'] = section
         project_list.append(item)
     return project_list
+
+def sdb_does_exist():
+    help_url = 'https://github.com/dhs-shine/litmus#prerequisite'
+    try:
+        call('sdb version', timeout=10)
+    except FileNotFoundError:
+        raise Exception('Please install sdb. Refer to {}'.format(help_url))
+    return

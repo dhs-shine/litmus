@@ -16,7 +16,7 @@ def main(*args, **kwargs):
     mgr.init_workingdir()
 
     # get projectinfo
-    project_info = load_yaml('conf.yaml')
+    project_info = load_yaml('conf_iot.yaml')
 
     username = project_info['username']
     password = project_info['password']
@@ -24,6 +24,9 @@ def main(*args, **kwargs):
     plugin_info = project_info['plugin_info']
 
     # get version from parameter
+    # ex) 20160923.3
+    # you can customize params from litmus (adhoc|run) -p option
+    # Nth arg : kwargs['param'][N]
     try:
         version = kwargs['param'][0]
     except (IndexError, TypeError):
@@ -38,6 +41,13 @@ def main(*args, **kwargs):
                                     version=version))
 
     # get an available device for testing.
+    # Please set up topology before acquiring device.
+    # Example)
+    # ~/.litmus/topology
+    # [ARTIK10_001]
+    # dev_type = artik10
+    # uart_port = /dev/ttyUSB0
+
     dut = mgr.acquire_dut('artik10', max_retry_times=180)
 
     # flashing binaries to device.
@@ -56,7 +66,7 @@ def main(*args, **kwargs):
     if not os.path.exists('result'):
         os.mkdir('result')
 
-    testcases = load_yaml('tc.yaml')
+    testcases = load_yaml('tc_iot.yaml')
     add_test_helper(dut, testcases)
     dut.run_tests()
 
