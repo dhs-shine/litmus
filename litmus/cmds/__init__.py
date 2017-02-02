@@ -32,7 +32,7 @@ def load_project_list(projects):
 def sdb_does_exist():
     help_url = 'https://github.com/dhs-shine/litmus#prerequisite'
     try:
-        call('sdb version', timeout=10)
+        call('sdb version', shell=True, timeout=10)
     except FileNotFoundError:
         raise Exception('Please install sdb. Refer to {}'.format(help_url))
     return
