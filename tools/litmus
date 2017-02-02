@@ -15,19 +15,16 @@
 
 import os
 import sys
-import signal
 import functools
 import logging
 import traceback
-from argparse import ArgumentParser, RawTextHelpFormatter
-from litmus import __version__, _path_for_locks_, _duts_, _projects_, _confdir_
+from argparse import (ArgumentParser,
+                      RawTextHelpFormatter)
+from litmus import (__version__,
+                    _path_for_locks_,
+                    _duts_, _projects_,
+                    _confdir_)
 from litmus.core.util import init_logger
-
-
-#def sigterm_handler(signal, frame):
-#    """docstring for sigterm_handler"""
-#    raise Exception('SIGTERM')
-#    sys.exit(1)
 
 
 def subparser(func):
@@ -47,7 +44,13 @@ def subparser(func):
 
 @subparser
 def adhoc_parser(parser):
-    """run a adhoc script
+    """run litmus project which is not imported.
+
+    This will help you to run test project with Continous Integration systems.
+    If you use seperated worker node for testing, just copy litmus project to
+    worker node and use this command. If not, you have to import litmus project
+    on worker node before run it.
+
     Examples:
        $ litmus adhoc <project_path>
     """
@@ -61,7 +64,12 @@ def adhoc_parser(parser):
 
 @subparser
 def mk_parser(parser):
-    """make a new litmus project
+    """make new litmus project
+
+    This will create a new directory and copy default templates.
+    You can locate more files and test scripts under this project directory
+    and run your own test script with project name.
+
     Examples:
        $ litmus mk <project_name>
     """
@@ -73,7 +81,12 @@ def mk_parser(parser):
 
 @subparser
 def rm_parser(parser):
-    """remove a litmus project
+    """remove litmus project
+
+    This will remove both of your litmus project and project directory from
+    your host. WARNING: You can not recover your test project sources after
+    run this command.
+
     Examples:
        $ litmus rm <project_name>
     """
@@ -83,7 +96,15 @@ def rm_parser(parser):
 
 @subparser
 def run_parser(parser):
-    """run a litmus project
+    """run litmus project
+
+    This will run your litmus project. Project entry point is userscript.py in
+    your project directory. You can pass argument to project with -p option.
+    You can also set working directory with -d option. If you don't set working
+    directory then litmus creates a temporary directory under /tmp and run test
+    on it, and remove it if test has done. hence you have to use -d option
+    if you want to keep test result.
+
     Examples:
        $ litmus run <project_name>
     """
@@ -98,6 +119,11 @@ def run_parser(parser):
 @subparser
 def ls_parser(parser):
     """list all litmus projects
+
+    This will list all litmus projects. Default project list locate under
+    ~/.litmus/projects. If you want to use your custom project list then use
+    - p option with main command.
+
     Examples:
        $ litmus ls
     """
@@ -107,6 +133,14 @@ def ls_parser(parser):
 @subparser
 def dev_parser(parser):
     """list all devices from topology configuration
+
+    If you want to run test with real device, you have to configure topology.
+    Default topology file path is ~/.litmus/topology.
+    Topology file example for standalone_tm1 is
+    [TM1_001]
+    dev_type = standalone_tm1
+    serialno = 012345678
+
     Examples:
        $ litmus dev
     """
@@ -115,7 +149,14 @@ def dev_parser(parser):
 
 @subparser
 def gt_parser(parser):
-    """generate a topology configuration
+    """generate topology configuration
+
+    This is a helper to generate topology configuration for non-standalone
+    devices. non-standalone device means that device is controlled by external
+    uart and power supply. xu3 and u3 device types are non-standard device.
+    This will find proper uart port and power supply node from your system.
+    Do not run this command if you use standalone type devices.
+
     Examples:
        $ litmus gt
     """
@@ -124,7 +165,12 @@ def gt_parser(parser):
 
 @subparser
 def cp_parser(parser):
-    """copy a litmus project
+    """copy litmus project
+
+    This will create new litmus project from existed one. New project has
+    duplicated project directory from origin project and does not use default
+    template. If you need duplicated project from old one, this will be useful.
+
     Examples:
        $ litmus cp <origin project name> <new project name>
     """
@@ -136,7 +182,11 @@ def cp_parser(parser):
 
 @subparser
 def imp_parser(parser):
-    """import a litmus project
+    """import litmus project
+
+    You sometimes need to run litmus project authored by others. This command
+    will import project and you can use run subcommand after import it.
+
     Examples:
        $ litmus imp <project name>
     """
@@ -224,7 +274,6 @@ if __name__ == '__main__':
         init_logger()
         init_lockdir()
         init_confdir()
-        #signal.signal(signal.SIGTERM, sigterm_handler)
         sys.exit(main(sys.argv))
     except KeyboardInterrupt:
         raise Exception('KeyboardInterrupt')
