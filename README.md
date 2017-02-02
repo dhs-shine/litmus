@@ -17,10 +17,10 @@ Install sdb from tizen sdk or download binary from below url.
 Unzip this package and copy sdb binary to /usr/bin
 
     $ wget http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.3.0_ubuntu-64.zip \
-      && unzip sdb_2.3.0_ubuntu-64.zip -d ~/temp \
-      && cp ~/temp/data/tools/sdb /usr/bin \
+      && unzip sdb_2.3.0_ubuntu-64.zip -d ./temp \
+      && sudo cp ./temp/data/tools/sdb /usr/bin \
       && rm -f sdb_2.3.0_ubuntu-64.zip \
-      && rm -rf ~/temp
+      && rm -rf ./temp
 
 
 # Buliding & installing
