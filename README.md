@@ -10,12 +10,18 @@ sdb is not released on download.tizen.org/tools but you can find it from sdk.
 Install sdb from tizen sdk or download binary from below url.
 
 32bit:
-http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.2.89_ubuntu-32.zip
+https://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.3.0_ubuntu-32.zip
 
 64bit:
-http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.2.89_ubuntu-64.zip
+https://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.3.0_ubuntu-64.zip
 
 Unzip this package and copy sdb binary to /usr/bin
+
+    $ wget http://download.tizen.org/sdk/tizenstudio/official/binary/sdb_2.3.0_ubuntu-64.zip \
+      && unzip sdb_2.3.0_ubuntu-64.zip -d ~/temp \
+      && cp ~/temp/data/tools/sdb /usr/bin \
+      && rm -f sdb_2.3.0_ubuntu-64.zip \
+      && rm -rf ~/temp
 
 
 Buliding & installing
@@ -35,7 +41,7 @@ Buliding & installing
 
    $ cd ..
    
-   $ sudo dpkg -i litmus_0.3.4-1_amd64.deb
+   $ sudo dpkg -i litmus_0.3.5-1_amd64.deb
 
 
 Getting started
