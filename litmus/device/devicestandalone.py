@@ -37,6 +37,11 @@ class devicestandalone(device):
         else:
             self._id = self._find_device_id()
 
+        if 'usbid' in kwargs:
+            self._usbid = kwargs['usbid']
+        else:
+            self._usbid = None
+
         self._manager = kwargs['manager']
 
     def _release(self):
@@ -130,7 +135,10 @@ class devicestandalone(device):
             self.run_cmd('reboot -f download', timeout=20)
             time.sleep(waiting)
             if flasher == 'lthor':
+                if self._usbid == None:
                 busid = self._find_usb_busid()
+                else:
+                    busid = self._usbid
                 self._release_global_lock()
                 self._lthor(filenames=filenames, busid=busid)
             elif flasher == 'heimdall':

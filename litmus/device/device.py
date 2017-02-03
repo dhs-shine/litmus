@@ -141,6 +141,8 @@ class device(object):
             try:
                 self.off(1)
                 self._cutter.on(powercut_delay)
+                self._uart.close()
+                self._uart.open()
                 self._wait_uart_shell_login_prompt()
                 self._login_uart_shell()
                 self._set_sdb_deviceid()
@@ -456,10 +458,25 @@ class device(object):
         if self._uart.isOpen():
             self._uart.close()
 
+    def _close_open_uart(self):
+        """docstring for close_open_uart"""
+        retrycnt = 0
+        while retrycnt < 10:
+            retrycnt += 1
+            try:
+                self._uart.close()
+                self._uart.open()
+            except:
+                time.sleep(0.1)
+
     def _thread_for_enter_download_mode(self, cmd, count):
         """docstring for thread_for_enter_download_mode"""
         for loop in range(count*20):
+            try:
             self._uart.write(self._enterkey)
+            except serial.SerialException as err:
+                logging.debug(err)
+                self._close_open_uart()
             time.sleep(0.05)
         self._uart.write(cmd)
         for loop in range(2):
@@ -497,7 +514,7 @@ class device(object):
         for l in filenames:
             cmd += ' {}'.format(l)
         logging.debug(cmd)
-        ret = call(cmd.split(), timeout=600)
+        ret = call(cmd, shell=True, timeout=600)
         if ret:
             raise Exception('Thor error.')
 
@@ -524,20 +541,19 @@ class device(object):
     def _heimdall(self, filenames, busaddr, devaddr, partition_bin_mappings):
         """docstring for _heimdall"""
         filenames = convert_single_item_to_list(filenames)
-        tar_cmd = ['tar', 'xvfz']
+        tar_cmd = 'tar xvfz'
         for l in filenames:
-            tar_cmd.append(l)
+            tar_cmd += ' {}'.format(l)
         logging.debug(tar_cmd)
-        call(tar_cmd, timeout=30)
+        call(tar_cmd, shell=True, timeout=30)
 
-        heimdall_cmd = ['heimdall', 'flash', '--usbbus', busaddr,
-                        '--usbdevaddr', devaddr]
+        heimdall_cmd = 'heimdall flash --usbbus {0} --usbdevaddr {1}'.format(busaddr, devaddr)
         for key, elem in partition_bin_mappings.items():
-            heimdall_cmd.append('--{}'.format(key))
-            heimdall_cmd.append(elem)
+            heimdall_cmd += ' --{}'.format(key)
+            heimdall_cmd += ' {}'.format(elem)
         logging.debug(heimdall_cmd)
 
-        ret = call(heimdall_cmd, timeout=600)
+        ret = call(heimdall_cmd, shell=True, timeout=600)
         if ret:
             raise Exception('Heimdall error.')
 
@@ -648,7 +664,7 @@ class device(object):
 
     def sdb_root_on(self):
         """docstring for sdb_root_on"""
-        logging.debug('=================sdb root on for {}================='
+        logging.debug('=================sdb root on for {}=================='
                       .format(self.get_name()))
         call('sdb -s {} root on'.format(self.get_id()).split(), timeout=10)
         time.sleep(0.5)
