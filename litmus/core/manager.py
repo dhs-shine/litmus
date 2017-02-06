@@ -278,7 +278,7 @@ Lightweight test manager for tizen automated testing
             self._backup_cwd = os.getcwd()
             if self._workingdir:
                 if not os.path.exists(self._workingdir):
-                    os.mkdir(self._workingdir)
+                    os.makedirs(self._workingdir, exist_ok=True)
                 os.chdir(self._workingdir)
             else:
                 workingdir_name = str((hashlib.sha1(str(datetime.now())
