@@ -136,7 +136,7 @@ class devicestandalone(device):
             time.sleep(waiting)
             if flasher == 'lthor':
                 if self._usbid == None:
-                busid = self._find_usb_busid()
+                    busid = self._find_usb_busid()
                 else:
                     busid = self._usbid
                 self._release_global_lock()

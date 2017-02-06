@@ -473,7 +473,7 @@ class device(object):
         """docstring for thread_for_enter_download_mode"""
         for loop in range(count*20):
             try:
-            self._uart.write(self._enterkey)
+                self._uart.write(self._enterkey)
             except serial.SerialException as err:
                 logging.debug(err)
                 self._close_open_uart()

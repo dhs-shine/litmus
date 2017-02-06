@@ -16,7 +16,7 @@
 import os
 import sys
 from litmus.core.util import call
-from litmus.cmd import sdb_does_exist
+from litmus.cmds import sdb_does_exist
 
 
 def main(args):
