@@ -21,7 +21,6 @@ def main(*args, **kwargs):
     username = project_info['username']
     password = project_info['password']
     binary_urls = project_info['binary_urls']
-    plugin_info = project_info['plugin_info']
 
     # get version from parameter
     # ex) 20160923.3
@@ -52,12 +51,6 @@ def main(*args, **kwargs):
 
     # flashing binaries to device.
     dut.flash(filenames)
-
-    # install plugins
-    install_plugin_from_git(dut,
-                            plugin_info['url'].format(username=username),
-                            plugin_info['branch'],
-                            plugin_info['script'])
 
     # turn on dut.
     dut.on()
