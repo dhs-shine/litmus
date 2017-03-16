@@ -37,7 +37,7 @@ Build a deb package with debuild
 Install the deb package by using dpkg
 
     $ cd ..
-    $ sudo dpkg -i litmus_0.3.5-1_amd64.deb
+    $ sudo dpkg -i litmus_0.3.6_amd64.deb
 
 
 Getting started
