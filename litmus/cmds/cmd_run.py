@@ -14,12 +14,12 @@
 # limitations under the License.
 
 import sys
-from litmus.cmds import load_project_list, sdb_does_exist
+from litmus.cmds import load_project_list, sdb_exist
 
 
 def main(args):
     """docstring for main"""
-    sdb_does_exist()
+    sdb_exist()
     prj_list = load_project_list(args.projects)
     project = next((prj for prj in prj_list if prj['name'] == args.project),
                    None)

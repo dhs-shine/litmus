@@ -16,12 +16,12 @@
 import os
 import sys
 from litmus.core.util import call
-from litmus.cmds import sdb_does_exist
+from litmus.cmds import sdb_exist
 
 
 def main(args):
     """docstring for main"""
-    sdb_does_exist()
+    sdb_exist()
     project_path = os.path.abspath(args.project_path)
     sys.path.append(project_path)
 
