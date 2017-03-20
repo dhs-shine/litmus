@@ -23,6 +23,7 @@ Depends: ${python3:Depends}, ${misc:Depends},
  clewarecontrol (>= 4.1),
  smartpower (>= 0.1),
  heimdall-flash (>= 1.4.1-2),
+ sdb (>= 2.3.0),
 Description: Lightweight test manager for tizen automated testing
  Litmus is a tool for managing test projects and supporting APIs for automated testing.
  Supported API : turn on / off device, Run commands / push and pull files over sdb

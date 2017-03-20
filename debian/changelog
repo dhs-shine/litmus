@@ -1,3 +1,9 @@
+litmus (0.3.7) unstable; urgency=medium
+
+  * add sdb dependency
+
+ -- Donghoon Shin <dhs.shine@gmail.com>  Mon, 20 Mar 2017 17:36:51 +0900
+
 litmus (0.3.6) unstable; urgency=medium
 
   * Remove unused script in template
