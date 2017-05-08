@@ -23,7 +23,7 @@ from litmus.core.util import call
 class devicestandalone(device):
     """
     Litmus device class.
-    User can control device in topology by this class methods.
+    User can control device in topology by these class methods.
     """
 
     _booting_time = 60
@@ -114,7 +114,8 @@ class devicestandalone(device):
         :param dict filenames: filename string or dict
         :param string flasher: external flashing tool name
         :param float waiting: waiting time to acquire cdc_acm device
-        :param dict partition_bin_mappings: partition table for device which use heimdall flasher
+        :param dict partition_bin_mappings: partition table for device which \
+                use heimdall flasher
 
         Example:
             >>> dut.flash(['boot.tar.gz','platform.tar.gz'])
@@ -135,7 +136,7 @@ class devicestandalone(device):
             self.run_cmd('reboot -f download', timeout=20)
             time.sleep(waiting)
             if flasher == 'lthor':
-                if self._usbid == None:
+                if self._usbid is None:
                     busid = self._find_usb_busid()
                 else:
                     busid = self._usbid

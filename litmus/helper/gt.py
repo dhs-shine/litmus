@@ -60,10 +60,18 @@ class generate_topology_sdb_device(object):
             p = '.*Microchip Technology.*'
             try:
                 smartpower_names = ['/dev/{}'.format(s)
-                                    for s in check_output('ls /dev | grep hidraw',
+                                    for s in check_output('ls /dev '
+                                                          '| grep hidraw',
                                                           shell=True).split()
                                     if find_pattern(p, check_output(['cat',
-                                                                     '/sys/class/hidraw/{}/device/uevent'.format(s)]))]
+                                                                     '/sys/'
+                                                                     'class/'
+                                                                     'hidraw/'
+                                                                     '{}/'
+                                                                     'device/'
+                                                                     'uevent'
+                                                                     .format(s)
+                                                                     ]))]
             except AttributeError:
                 smartpower_names = []
             logging.debug('smart powers : {0}'.format(smartpower_names))
@@ -146,7 +154,8 @@ class generate_topology_sdb_device(object):
         """docstring for enter_bootloader_prompt"""
 
         # create threads for entering bootloader prompt
-        delay = (5 + (len(self.cleware4s) * 2 * 4 + len(self.smartpowers) * 2 * 2)) * 30
+        delay = (5 + (len(self.cleware4s) * 2 * 4 +
+                 len(self.smartpowers) * 2 * 2)) * 30
 
         threads = []
         for l in self.uarts:
@@ -240,7 +249,8 @@ class generate_topology_sdb_device(object):
 
         # recognize device type
         for l in self.uarts:
-            logging.debug('[Recognize device type for uart : {}]'.format(l.name))
+            logging.debug('[Recognize device type for uart : '
+                          '{}]'.format(l.name))
             cfg = self.recognize_device(config, l)
             if cfg:
                 cfgs.append(cfg)

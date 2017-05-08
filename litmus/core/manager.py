@@ -60,7 +60,8 @@ Lightweight test manager for tizen automated testing
     def __init__(self, *args, **kwargs):
         """
         :param str topology: topology file path
-        :param str project_path: project path. If this is None then cwd will be used as project path
+        :param str project_path: project path. If this is None then cwd will \
+                be used as project path
         :param bool verbose: init logger to print all logs
         """
         super(manager, self).__init__()
@@ -282,7 +283,7 @@ Lightweight test manager for tizen automated testing
                 os.chdir(self._workingdir)
             else:
                 workingdir_name = str((hashlib.sha1(str(datetime.now())
-                                              .encode()).hexdigest()))
+                                      .encode()).hexdigest()))
                 workspace_path = os.path.join(self._tmpdir, workingdir_name)
                 os.mkdir(workspace_path)
                 os.chdir(workspace_path)

@@ -35,7 +35,7 @@ from litmus import _path_for_locks_
 class device(object):
     """
     Litmus device class.
-    User can control device in topology by this class methods.
+    User can control device in topology by these class methods.
     """
 
     _baudrate = 115200
@@ -130,9 +130,13 @@ class device(object):
 
     def on(self, powercut_delay=1):
         """
-        Turn on the device acquired.
+        Turn on the acquired device.
 
         :param float powercut_delay: power-cut delay for cutter
+
+        Example:
+            >>> dut.on()
+
         """
         logging.debug('=================Turn on device {}=================='
                       .format(self.get_name()))
@@ -161,9 +165,13 @@ class device(object):
 
     def off(self, powercut_delay=1):
         """
-        Trun off the device acquired.
+        Trun off the acquired device.
 
         :param float powercut_delay: power-cut delay for cutter
+
+        Example:
+            >>> dut.off()
+
         """
         logging.debug('=================Turn off device {}================='
                       .format(self.get_name()))
@@ -402,7 +410,8 @@ class device(object):
     def _screenshot_wayland(self, filename):
         """docstring for _screenshot_wayland"""
         # Find all viewable window id
-        p_winid = '.*(0x[a-zA-Z0-9]{8})\s+\d+\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+).*\sViewable.*'
+        p_winid = '.*(0x[a-zA-Z0-9]{8})\s+\d+\s+\d+\s+\d+' \
+                  '\s+\d+\s+(\d+)\s+(\d+).*\sViewable.*'
         winids = find_all_pattern(p_winid,
                                   self.run_cmd('enlightenment_info -topvwins',
                                                timeout=20))
@@ -547,7 +556,8 @@ class device(object):
         logging.debug(tar_cmd)
         call(tar_cmd, shell=True, timeout=30)
 
-        heimdall_cmd = 'heimdall flash --usbbus {0} --usbdevaddr {1}'.format(busaddr, devaddr)
+        heimdall_cmd = 'heimdall flash --usbbus {0}' \
+                       ' --usbdevaddr {1}'.format(busaddr, devaddr)
         for key, elem in partition_bin_mappings.items():
             heimdall_cmd += ' --{}'.format(key)
             heimdall_cmd += ' {}'.format(elem)
@@ -663,7 +673,13 @@ class device(object):
         pass
 
     def sdb_root_on(self):
-        """docstring for sdb_root_on"""
+        """
+        Set root mode of device
+
+        Example:
+            >>> dut.sdb_root_on()
+
+        """
         logging.debug('=================sdb root on for {}=================='
                       .format(self.get_name()))
         call('sdb -s {} root on'.format(self.get_id()).split(), timeout=10)

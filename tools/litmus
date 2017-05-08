@@ -46,10 +46,11 @@ def subparser(func):
 def adhoc_parser(parser):
     """run litmus project which is not imported.
 
-    This will run litmus project which is not imported help you to use CI for
-    testing. If you use seperated worker node of CI for running test project,
-    just copy project directory to worker node and use this command. If not,
-    you have to import litmus project on worker node before run it.
+    This will run litmus test project which is not imported. This command helps
+    you to use litmus with CI tool for testing. If you use seperated worker
+    node of CI tool for running test project, just copy project directory to
+    worker node and use this command. If not, you have to import litmus project
+    on worker node before running test.
 
     Examples:
        $ litmus adhoc <project_path>
@@ -66,9 +67,9 @@ def adhoc_parser(parser):
 def mk_parser(parser):
     """make new litmus project.
 
-    This will create a new directory for project and copy default templates.
-    You can locate more files and test scripts under this project directory
-    and run it with project name.
+    This will create new directory for project based on default templates.
+    You can locate more files and test scripts under new project directory to
+    customize your test project.
 
     Examples:
        $ litmus mk <project_name>
@@ -83,9 +84,9 @@ def mk_parser(parser):
 def rm_parser(parser):
     """remove litmus project.
 
-    This will remove both of your litmus project and project directory from
-    your host. WARNING: You can not recover your test project sources after
-    run this command.
+    This will remove both of your litmus project from project list and project
+    directory from your host file system.
+    WARNING: You can't recover your test project after run this command.
 
     Examples:
        $ litmus rm <project_name>
@@ -98,12 +99,12 @@ def rm_parser(parser):
 def run_parser(parser):
     """run litmus project.
 
-    This will run your litmus project. Project entry point is userscript.py in
-    your project directory. You can pass argument to project with -p option.
+    This will run your litmus project. Project's entry point is userscript.py
+    in your project directory. You can pass argument to project with -p option.
     You can also set working directory with -d option. If you don't set working
     directory then litmus creates a temporary directory under /tmp and run test
     on it, and remove it if test has done. Hence you have to use -d option to
-    keep test result and workspace.
+    keep test result and test workspace.
 
     Examples:
        $ litmus run <project_name>
@@ -120,8 +121,8 @@ def run_parser(parser):
 def ls_parser(parser):
     """list all litmus projects.
 
-    This will list all litmus projects on your host. Default project list is
-    located in ~/.litmus/projects.
+    This will list all litmus projects on your host. Default project list file
+    is located at ~/.litmus/projects.
 
     Examples:
        $ litmus ls
@@ -135,7 +136,8 @@ def dev_parser(parser):
 
     This will list all available test devices in topology configuration.
     If you want to run test with real device, you have to set up topology
-    configuration. Default topology file is located in ~/.litmus/topology.
+    configuration properly before testing.
+    Default topology file is located at ~/.litmus/topology.
 
     Topology file example for standalone_tm1 is:
 
@@ -153,11 +155,14 @@ def dev_parser(parser):
 def gt_parser(parser):
     """generate topology configuration.
 
-    This is a helper to generate topology configuration for non-standalone
-    devices. non-standalone device means that device is controlled by external
-    uart and power supply. xu3 and u3 device types are non-standard device.
-    This will find proper uart port and power supply node from your system.
-    Do not run this command if you use standalone type devices.
+    This is a helper to generate topology configuration automatically
+    for non-standalone devices. non-standalone device means that device is
+    controlled by external uart and power supply.
+    xu3 and u3 device types are non-standard devices.
+    This will find proper uart port and power supply node for your
+    non-standalone device from your system and make configurations.
+    Don't run this command if you use standalone type devices only. This
+    regenerate topology file then you will lose your configuration.
 
     Examples:
        $ litmus gt
@@ -169,9 +174,8 @@ def gt_parser(parser):
 def cp_parser(parser):
     """copy litmus project.
 
-    This will create new litmus project from existed one. New project has
-    duplicated project directory from origin project and does not use default
-    template for project.
+    This will create new litmus project from existed one. New project duplicate
+    files from origin project directory.
 
     Examples:
        $ litmus cp <origin project name> <new project name>
@@ -187,7 +191,8 @@ def imp_parser(parser):
     """import litmus project.
 
     This command will import litmus project. Import means that add new project
-    authored by others into project list on your host.
+    which authored by others to project list on your host. If you get new test
+    project from remote git or archive, You can use this command to import it.
 
     Examples:
        $ litmus imp <project name>

@@ -16,8 +16,12 @@
 import os
 import re
 import sys
+import time
+import queue
 import logging
 import subprocess
+from threading import Thread
+from litmus.core.util import convert_single_item_to_list
 
 
 def add_test_helper(dut, testcases):
@@ -36,28 +40,23 @@ def add_test_helper(dut, testcases):
 
     tc.yaml example:
         >>> testcases:
-            -
-             name: verify_process_is_running
-             from: litmus.helper.tests
-             result_dir : result
-             plan:
-                  -
-                   name: dbus_is_running
-                   param: dbus
-                   pattern: .*/usr/bin/dbus-daemon.*
-                  -
-                   name: enlightenment_is_running
-                   param: enlightenment
-                   pattern: .*/usr/bin/enlightenment.*
-            -
-             name: verify_dmesg
-             from: litmus.helper.tests
-             result_dir : result
-             plan:
-                  -
-                   name: panel_is_alive
-                   param: panel
-                   pattern: .*panel is dead.*
+              - name: verify_process_is_running
+                from: litmus.helper.tests
+                result_dir: result
+                plan:
+                  - name: dbus_is_running
+                    param: dbus
+                    pattern: .*/usr/bin/dbus-daemon.*
+                  - name: enlightenment_is_running
+                    param: enlightenment
+                    pattern: .*/usr/bin/enlightenment.*
+              - name: verify_dmesg
+                from: litmus.helper.tests
+                result_dir: result
+                plan:
+                  - name: panel_is_alive
+                    param: panel
+                    pattern: .*panel is dead.*
 
     """
 
@@ -83,14 +82,14 @@ def verify_process_is_running(dut, plan, result_dir):
     Example:
         >>> from litmus.helper.tests import verify_process_is_running
         >>> verify_wifi_is_working(dut,
-                                   [{\'name\': \'dbus_is_running\',
-                                     \'param\': \'dbus\',
-                                     \'pattern\': \'.*/usr/bin/dbus-daemon.*\'},
-                                    {\'name\': \'deviced_is_runing\',
-                                     \'param\': \'deviced\',
-                                     \'pattern\': \'.*/usr/bin/deviced.*\'},
+                                   [{'name': 'dbus_is_running',
+                                     'param': 'dbus',
+                                     'pattern': '.*/usr/bin/dbus-daemon.*'},
+                                    {'name': 'deviced_is_runing',
+                                     'param': 'deviced',
+                                     'pattern': '.*/usr/bin/deviced.*'},
                                     ],
-                                   \'result\')
+                                   'result')
 
     """
     test_name = 'verify_process_is_running'
@@ -131,7 +130,8 @@ def verify_process_is_running(dut, plan, result_dir):
 
     def _save_result(result, result_dir):
         """docstring for _save_result"""
-        with open(os.path.join(result_dir, 'testresult_process_is_running.xml'), 'w') as f:
+        with open(os.path.join(result_dir,
+                               'testresult_process_is_running.xml'), 'w') as f:
             f.write(result)
 
     _save_result(_run(), os.path.abspath(result_dir))
@@ -198,12 +198,6 @@ def verify_dmesg(dut, plan, result_dir):
             f.write(result)
 
     _save_result(_run(), os.path.abspath(result_dir))
-
-
-import time
-import queue
-from threading import Thread
-from litmus.core.util import convert_single_item_to_list
 
 
 def verify_wifi_is_working(dut, wifi_apname, wifi_password, result_dir):
@@ -297,8 +291,10 @@ def verify_wifi_is_working(dut, wifi_apname, wifi_password, result_dir):
             if wifi_password and wifi_password != '':
                 _write_cmd(wifi_password,
                            'Connection step finished',
-                           ['Wi-Fi Activation Failed! error : OPERATION_FAILED',
-                            'Device state changed callback, state : Deactivated',
+                           ['Wi-Fi Activation Failed! error : '
+                            'OPERATION_FAILED',
+                            'Device state changed callback, state : '
+                            'Deactivated',
                             'Operation failed!'])
             _write_cmd('6',
                        ['Success to get connection state : Connected',
@@ -308,7 +304,8 @@ def verify_wifi_is_working(dut, wifi_apname, wifi_password, result_dir):
                         'Device state changed callback, state : Deactivated',
                         'Operation failed!',
                         'Success to get connection state : Disconnected',
-                        'Connection state changed callback, state : Disconnected, AP name : {}'.format(wifi_apname)])
+                        'Connection state changed callback, state : '
+                        'Disconnected, AP name : {}'.format(wifi_apname)])
             _write_cmd('0', 'exit', None)
 
             dict_for_output = {'tc_name': test_name,

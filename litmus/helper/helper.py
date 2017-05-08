@@ -16,9 +16,12 @@
 import re
 import sys
 import time
+import shutil
 import logging
 import requests
+import tempfile
 import urllib.parse
+from subprocess import DEVNULL
 from bs4 import BeautifulSoup
 from litmus.core.util import find_pattern, find_all_pattern
 from litmus.core.util import call
@@ -26,7 +29,8 @@ from litmus.core.util import call
 
 def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
                               username='', password='',
-                              pattern_version='tizen[a-zA-Z0-9-_.^/]*[0-9]{8}.[0-9]{1,2}',
+                              pattern_version='tizen[a-zA-Z0-9-_.^/]'
+                                              '*[0-9]{8}.[0-9]{1,2}',
                               version=None,
                               timeout=10,
                               maxretry=20,
@@ -34,19 +38,23 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
     """
     Download snapshot images from web server.
 
-    :param str url: url for downloading binaries. This has to include 'latest' string
-    :param str pattern_bin: filename pattern to find correct binary under the url
+    :param str url: url for downloading binaries. This has to include \
+            'latest' string
+    :param str pattern_bin: filename pattern to find correct binary \
+            under the url
     :param str username: username to access http server
     :param str password: password to access http server
     :param str pattern_version: pattern of tizen snapshot version string
-    :param str version: specific version string of tizen snapshot what you want to download
+    :param str version: specific version string of tizen snapshot \
+            what you want to download
     :param float timeout: timeout
     :param int maxretry: max retry count to attempt the url for downloading
     :param float waiting_for_retry: delay for each retry
 
     Example:
         >>> from litmus.helper.helper import tizen_snapshot_downloader
-        >>> tizen_snapshot_downloader(url=\'http://download.tizen.org/snapshots/tizen/tv/latest/images/arm-wayland/tv-wayland-armv7l-odroidu3/\')
+        >>> tizen_snapshot_downloader(
+                url='http://download.tizen.org/snapshots/tizen/tv/latest/images/arm-wayland/tv-wayland-armv7l-odroidu3/')
         [\'tizen-tv_20160516.2_tv-wayland-armv7l-odroidu3.tar.gz\']
 
     :returns list: filenames of downloaded binaries
@@ -92,7 +100,8 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
             soup = BeautifulSoup(f.text, 'html.parser')
             filenames = []
 
-            for l in soup.findAll('a', attrs={'href': re.compile(pattern_bin)}):
+            for l in soup.findAll('a',
+                                  attrs={'href': re.compile(pattern_bin)}):
                 filename = l['href']
                 fileurl = urllib.parse.urljoin(url, filename)
                 logging.debug(fileurl)
@@ -104,18 +113,19 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
                                         stream=True)
 
                     total_length = resp.headers.get('Content-Length')
-
+                    cs = 1024 * 1024
                     if total_length is None:
                         f.write(resp.content)
                     else:
                         downloaded_data = 0
                         total_length = int(total_length)
-                        for download_data in resp.iter_content(chunk_size=1024 * 1024):
+                        for download_data in resp.iter_content(chunk_size=cs):
                             downloaded_data += len(download_data)
                             f.write(download_data)
                             done = int(50 * downloaded_data / total_length)
                             sys.stdout.write('\r[{0}{1}]'.format('#'*done,
-                                                                 ' '*(50-done)))
+                                                                 ' '*(50-done)
+                                                                 ))
                             sys.stdout.flush()
                 logging.debug('')
                 filenames.append(filename)
@@ -141,15 +151,11 @@ def tizen_snapshot_downloader(url, pattern_bin='tar.gz$',
     return filenames
 
 
-import tempfile
-import shutil
-from subprocess import DEVNULL
-
-
 def install_plugin_from_git(dut, url, branch, script,
                             waiting=5, timeout=180, commitid=None):
     """
-    Clone a git project which include tizen plugins and install the plugins on device.
+    Clone a git project which include tizen plugins and install the plugins \
+            on device.
     This helper function turn on device and turn off device automatically.
 
     :param device dut: device instance
@@ -160,7 +166,8 @@ def install_plugin_from_git(dut, url, branch, script,
     :param float timeout: timeout
     :param str commitid: commitid which you want to clone
 
-    .. note:: You have to configure your open-ssh key if you want to use ssh protocol to clone the git project.
+    .. note:: You have to configure your open-ssh key if you want to use ssh \
+            protocol to clone the git project.
 
     Example:
         >>> from litmus.helper.helper import install_plugin_from_git
@@ -188,8 +195,11 @@ def install_plugin_from_git(dut, url, branch, script,
         call('git --git-dir={0}/.git checkout {1}'.format(tmpdir, commitid),
              shell=True)
 
-    call('find ./{0} -exec perl -pi -e "s/sdb\s+(-d\s+)*(root|shell|push|pull)/sdb -s {1} \\2/g" {{}} \;'.format(tmpdir, dut.get_id()), stderr=DEVNULL, shell=True)
-    call('find ./{0} -exec perl -pi -e "s/sdb\s+.*reboot.*//g" {{}} \;'.format(tmpdir), stderr=DEVNULL, shell=True)
+    call('find ./{0} -exec perl -pi -e "s/sdb\s+(-d\s+)*(root|shell|push|pull)'
+         '/sdb -s {1} \\2/g" {{}} \;'.format(tmpdir, dut.get_id()),
+         stderr=DEVNULL, shell=True)
+    call('find ./{0} -exec perl -pi -e "s/sdb\s+.*reboot.*//g"'
+         ' {{}} \;'.format(tmpdir), stderr=DEVNULL, shell=True)
 
     script_path = '/'.join(script.split('/')[:-1])
     script_name = script.split('/')[-1]
