@@ -411,13 +411,13 @@ class device(object):
         """docstring for _screenshot_wayland"""
         # Find all viewable window id
         p_winid = '.*(0x[a-zA-Z0-9]{8})\s+\d+\s+\d+\s+\d+' \
-                  '\s+\d+\s+(\d+)\s+(\d+).*\sViewable.*'
+                  '\s+\d+\s+(\d+)\s+(\d+).*[0]{1}\s+\d+\s+[NV]{1}.*'
         winids = find_all_pattern(p_winid,
                                   self.run_cmd('enlightenment_info -topvwins',
                                                timeout=20))
         if winids:
             # Dump windows
-            outs = self.run_cmd('enlightenment_info -dump_topvwins',
+            outs = self.run_cmd('cd /tmp; enlightenment_info -dump_topvwins',
                                 timeout=20)
             dirn = find_pattern('directory:\s(.*)',
                                 outs,
@@ -429,14 +429,15 @@ class device(object):
 
             # If dump does not exist then remove winid from list
             winids = [winid for winid in winids
-                      if os.path.exists(os.path.join(tmpdir, winid[0]+'.png'))]
+                      if os.path.exists(os.path.join(tmpdir,
+                                                     winid[0]+'_0.png'))]
 
             # Base image
             bg = Image.new('RGB', (self._screen_width, self._screen_height))
             # Merge images
             for winid in reversed(winids):
                 try:
-                    fg = Image.open(os.path.join(tmpdir, winid[0]+'.png'))
+                    fg = Image.open(os.path.join(tmpdir, winid[0]+'_0.png'))
                     bg.paste(fg, (int(winid[1]), int(winid[2])), fg)
                 except FileNotFoundError:
                     pass
